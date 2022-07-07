@@ -1,0 +1,26 @@
+{
+    "name": "user/blogmvc",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "core\\": "core/",
+            "src\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "celio natti",
+            "email": "celionatti@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0",
+        "guzzlehttp/guzzle": "^7.4",
+        "vlucas/phpdotenv": "^5.4",
+        "symfony/dom-crawler": "^6.1",
+        "psr/container": "^2.0",
+        "phpmailer/phpmailer": "^6.6",
+        "php-curl-class/php-curl-class": "^9.6",
+        "symfony/css-selector": "^6.1"
+    }
+}
