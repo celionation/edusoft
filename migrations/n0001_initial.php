@@ -24,6 +24,7 @@ declare(strict_types=1);
             firstname VARCHAR(60) NULL ,
             lastname VARCHAR(60) NULL ,
             `user_id` VARCHAR(60) NULL ,
+            `code_id` VARCHAR(60) NULL ,
             email VARCHAR(174) NULL ,
             password VARCHAR(255) NULL ,
             img VARCHAR(255) NULL ,

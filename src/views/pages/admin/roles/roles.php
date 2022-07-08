@@ -23,8 +23,7 @@ $this->title = "Levels & Permissions";
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Role</th>
-                            <th scope="col">Document Type</th>
-                            <th scope="col">Permissions</th>
+                            <th scope="col">Details</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -34,14 +33,10 @@ $this->title = "Levels & Permissions";
                                 <th scope="row"><?= $key + 1 ?></th>
                                 <td class="text-capitalize"><?= $role->role ?></td>
                                 <td><?= $role->doctype ?></td>
-                                <td class="d-flex justify-content-between align-items-center">
-                                    <p><?= $role->read ? 'Read' : '' ?></p>
-                                    <p><?= $role->write ? 'Write' : '' ?></p>
-                                    <p><?= $role->delete ? 'Delete' : '' ?></p>
-                                </td>
+
                                 <td class="text-end">
-                                    <a href="/admin/roles/create/<?= $role->id ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    <a href="/admin/roles/create/<?= $role->role_id ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteRole('<?= $role->role_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -51,3 +46,11 @@ $this->title = "Levels & Permissions";
         </div>
     </div>
 </div>
+
+<script>
+    function deleteRole(id) {
+        if (window.confirm("Are you sure you want to delete this role? This cannot be undone!")) {
+            window.location.href = `/admin/roles/delete/${id}`;
+        }
+    }
+</script>

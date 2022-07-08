@@ -25,31 +25,28 @@ $this->title = "Admission Form";
                             File Inputs <span class="text-danger">*</span>
                         </small>
                         <div class="col-md-4">
-                            <?= Form::inputField('Ref No', 'ref_no', $user->surname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Jamb Reg No', 'jamb_reg_no', $admission->jamb_reg_no ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::inputField('Jamb Reg No', 'jamb_reg_no', $user->firstname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::selectField('Duration Of Course', 'duration', $admission->duration ?? '', $courseDuration, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Course Duration', 'course_duration', $user->acl ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::selectField('Faculty', 'faculty', $admission->faculty ?? '', $facOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Faculty', 'faculty', $user->acl ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::selectField('Department', 'department', $admission->department ?? '', $deptOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Department', 'department', $user->acl ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::selectField('Degree', 'degree', $admission->degree ?? '', $degreeOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Course', 'course', $user->acl ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::selectField('Entry Mode', 'entry_mode', $admission->entry_mode ?? '', $entryOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Degree', 'degree', $user->acl ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::inputField('Matriculation No', 'matriculation_no', $admission->matriculation_no ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Entry Mode', 'entry_mode', $user->acl ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
-                        </div>
-                        <div class="col-md-4">
-                            <?= Form::inputField('Matriculation No', 'matriculation_no', $user->firstname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::selectField('Status', 'status', $admission->status ?? '', $statusOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                     </div>
 
@@ -60,25 +57,25 @@ $this->title = "Admission Form";
                             Details Input <span class="text-danger">*</span>
                         </small>
                         <div class="col-md-12">
-                            <?= Form::inputField('Surname', 'surname', $user->surname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Surname', 'surname', $admission->surname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('First Name', 'firstname', $user->firstname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('First Name', 'firstname', $admission->firstname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('Last Name', 'lastname', $user->lastname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Last Name', 'lastname', $admission->lastname ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('E-Mail', 'email', $user->email ?? '', ['class' => 'form-control', 'type' => 'email'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('E-Mail', 'email', $admission->email ?? '', ['class' => 'form-control', 'type' => 'email'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('Phone Number', 'phone', $user->email ?? '', ['class' => 'form-control', 'type' => 'number'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Phone Number', 'phone', $admission->phone ?? '', ['class' => 'form-control', 'type' => 'number'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('Date Of Birth', 'dob', $user->email ?? '', ['class' => 'form-control', 'type' => 'date'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Date Of Birth', 'dob', $admission->dob ?? '', ['class' => 'form-control', 'type' => 'date'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::selectField('Martial Status', 'martial_status', $user->gender ?? '', [], ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::selectField('Martial Status', 'martial_status', $admission->martial_status ?? '', $martialStatus, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                     </div>
 
@@ -87,19 +84,19 @@ $this->title = "Admission Form";
                             Guardians / Next of Kin <span class="text-danger">*</span>
                         </small>
                         <div class="col-md-6">
-                            <?= Form::inputField('Guardian Name', 'guardian_name', $user->state ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Guardian Name', 'guardian_name', $admission->guardian_name ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('Guardian Phone Number', 'guardian_phone', $user->state ?? '', ['class' => 'form-control', 'type' => 'number'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Guardian Phone Number', 'guardian_phone', $admission->guardian_phone ?? '', ['class' => 'form-control', 'type' => 'number'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::inputField('Next of Kin Name', 'kin_name', $user->state ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Next of Kin Name', 'kin_name', $admission->kin_name ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::inputField('Next of Kin Phone Number', 'kin_phone', $user->state ?? '', ['class' => 'form-control', 'type' => 'number'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Next of Kin Phone Number', 'kin_phone', $admission->kin_phone ?? '', ['class' => 'form-control', 'type' => 'number'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::inputField('Next of Kin E-Mail', 'kin_email', $user->email ?? '', ['class' => 'form-control', 'type' => 'email'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Next of Kin E-Mail', 'kin_email', $admission->kin_email ?? '', ['class' => 'form-control', 'type' => 'email'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                     </div>
 
@@ -120,7 +117,7 @@ $this->title = "Admission Form";
                             <button type="submit" class="btn btn-success w-100">Admit</button>
                         </div>
                         <div class="col">
-                            <a href="/admin/users" class="btn btn-danger w-100">Cancel</a>
+                            <a href="/admin/admission" class="btn btn-danger w-100">Cancel</a>
                         </div>
                     </div>
 

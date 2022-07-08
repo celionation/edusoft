@@ -23,9 +23,6 @@ class n0003_roles
             role_id VARCHAR(60) NULL,
             `role` VARCHAR(50) NULL,
             `doctype` VARCHAR(100) NULL,
-            `read` TINYINT(1) NOT NULL DEFAULT '0',
-            `write` TINYINT(1) NOT NULL DEFAULT '0',
-            `delete` TINYINT(1) NOT NULL DEFAULT '0',
             PRIMARY KEY (id), 
             INDEX role_id (role_id), 
             INDEX role (role)

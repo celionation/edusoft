@@ -22,22 +22,10 @@ $this->title = "Levels & Permissions";
 
                     <div class="row g-3 my-1">
                         <div class="col-md-6">
-                            <?= Form::inputField('Role', 'role', $level->role ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Role', 'role', $role->role ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= Form::inputField('Doc Type', 'doctype', $level->doctype ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
-                        </div>
-                    </div>
-
-                    <div class="row g-3 my-1">
-                        <div class="col-md-4">
-                            <?= Form::checkInput('Read', 'read', '', ['class' => 'form-check-input'], ['class' => 'form-check'], $errors); ?>
-                        </div>
-                        <div class="col-md-4">
-                            <?= Form::checkInput('Write', 'write', '', ['class' => 'form-check-input'], ['class' => 'form-check'], $errors); ?>
-                        </div>
-                        <div class="col-md-4">
-                            <?= Form::checkInput('Delete', 'delete', '', ['class' => 'form-check-input'], ['class' => 'form-check'], $errors); ?>
+                            <?= Form::inputField('Doc Type', 'doctype', $role->doctype ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                     </div>
 

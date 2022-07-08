@@ -57,7 +57,7 @@ $this->title = "Institution Levels";
                                                 <tr>
                                                     <td><?= $level->level ?></td>
                                                     <td>
-                                                        <a href="/admin/delete_level/<?= $level->id ?>" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></a>
+                                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteLevel('<?= $level->id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
                                                         <a href="/admin/levels/<?= $level->id ?>" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
                                                     </td>
                                                 </tr>
@@ -84,3 +84,11 @@ $this->title = "Institution Levels";
         </div>
     </div>
 </div>
+
+<script>
+    function deleteLevel(id) {
+        if (window.confirm("Are you sure you want to delete this Level? This cannot be undone!")) {
+            window.location.href = `/admin/delete_level/${id}`;
+        }
+    }
+</script>

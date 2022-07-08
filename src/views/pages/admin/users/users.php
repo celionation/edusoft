@@ -45,7 +45,7 @@ $this->title = "Admin Users";
                                 <td class="text-end">
                                     <button class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Preview"><i class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#previewUser"></i></button>
                                     <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteUser('<?= $user->user_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -110,3 +110,11 @@ $this->title = "Admin Users";
         </div>
     </div>
 </div>
+
+<script>
+    function deleteUser(id) {
+        if (window.confirm("Are you sure you want to delete this user? This cannot be undone!")) {
+            window.location.href = `/admin/users/delete/${id}`;
+        }
+    }
+</script>

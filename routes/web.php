@@ -5,6 +5,7 @@ use src\controllers\DocsController;
 use src\controllers\SiteController;
 use src\controllers\AdminController;
 use src\controllers\PortalController;
+use src\controllers\LecturerController;
 use src\controllers\AdmissionController;
 
 
@@ -41,8 +42,20 @@ $app->router->get('/admin/account', [AdminController::class, 'account']);
 //Admission
 $app->router->get('/admin/admission', [AdmissionController::class, 'admission']);
 $app->router->post('/admin/admission', [AdmissionController::class, 'admission']);
+$app->router->get('/admin/admission/lists', [AdmissionController::class, 'admissionLists']);
 $app->router->get('/admin/admission/{id}', [AdmissionController::class, 'createAdmission']);
 $app->router->post('/admin/admission/{id}', [AdmissionController::class, 'createAdmission']);
+$app->router->get('/admin/admission/delete/{id}', [AdmissionController::class, 'deleteAdmission']);
+$app->router->get('/admin/admission/verified/{id}', [AdmissionController::class, 'verified']);
+
+//Lecturer
+$app->router->get('/admin/lecturers', [LecturerController::class, 'lecturers']);
+$app->router->post('/admin/lecturers', [LecturerController::class, 'lecturers']);
+$app->router->get('/admin/lecturers/lists', [LecturerController::class, 'lecturerLists']);
+$app->router->get('/admin/lecturers/{id}', [LecturerController::class, 'createLecturer']);
+$app->router->post('/admin/lecturers/{id}', [LecturerController::class, 'createLecturer']);
+$app->router->get('/admin/lecturers/delete/{id}', [LecturerController::class, 'deleteLecturer']);
+$app->router->get('/admin/lecturers/verified/{id}', [LecturerController::class, 'verified']);
 
 //Admin Docs
 $app->router->get('/admin/faculties', [DocsController::class, 'faculties']);
@@ -57,6 +70,7 @@ $app->router->get('/admin/courses', [DocsController::class, 'courses']);
 $app->router->get('/admin/course/create/{id}', [DocsController::class, 'createCourse']);
 $app->router->post('/admin/course/create/{id}', [DocsController::class, 'createCourse']);
 
+//Users
 $app->router->get('/admin/users', [AdminController::class, 'users']);
 $app->router->get('/admin/users/create/{id}', [AdminController::class, 'createuser']);
 $app->router->post('/admin/users/create/{id}', [AdminController::class, 'createuser']);

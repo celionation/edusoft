@@ -3,7 +3,7 @@
 
 ?>
 
-<footer class="bg-black border-bottom border-3 border-danger px-3 mt-5 fixed-bottom">
+<footer class="bg-black border-bottom border-3 border-danger px-3 mt-5">
     <div class="row">
         <div class="col-12 col-lg-12 col-md-12 col-sm-12 bg-black">
             <div class="card-footer root">

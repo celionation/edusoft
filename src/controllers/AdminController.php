@@ -14,6 +14,7 @@ use src\classes\Permission;
 use core\helpers\FileUpload;
 use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
+use src\models\Admissions;
 use src\models\Levels;
 
 class AdminController extends Controller
@@ -81,10 +82,39 @@ class AdminController extends Controller
             Response::redirect('admin/users/new');
         }
 
-        $roles = Roles::find(['order' => 'role']);
+        $roles = Roles::find([
+            'conditions' => "role != 'student'",
+            'order' => 'role'
+        ]);
         $roleOptions = ['' => '---'];
         foreach ($roles as $role) {
             $roleOptions[$role->role] = $role->role;
+        }
+
+        // For Registering a new Student
+        if (isset($_GET['matriculation_no'])) {
+            $roles = Roles::find([
+                'conditions' => "role = 'student'",
+                'order' => 'role'
+            ]);
+            $roleOptions = ['' => '---'];
+            foreach ($roles as $role) {
+                $roleOptions[$role->role] = $role->role;
+            }
+
+            $matricNo = $request->sanitize($_GET['matriculation_no']);
+            $admParams = [
+                'columns' => "surname, firstname, lastname, email, matriculation_no",
+                'conditions' => "matriculation_no = :matriculation_no",
+                'bind' => ['matriculation_no' => $matricNo],
+            ];
+
+            $admission = Admissions::findFirst($admParams);
+
+            $user->surname = $admission->surname;
+            $user->firstname = $admission->firstname;
+            $user->lastname = $admission->lastname;
+            $user->email = $admission->email;
         }
 
         if ($request->isPost()) {
@@ -95,7 +125,13 @@ class AdminController extends Controller
             }
             $user->user_id = GenerateToken::randomString(60);
 
+            if(isset($_GET['matriculation_no'])) {
+                $user->code_id = $admission->matriculation_no;
+            }
+
             $upload = new FileUpload('img');
+
+            $upload->required = true;
 
             $uploadErrors = $upload->validate();
 
@@ -155,10 +191,15 @@ class AdminController extends Controller
     {
         $id = $request->getParam('id');
 
+        $params = [
+            'conditions' => "role_id = :role_id",
+            'bind' => ['role_id' => $id]
+        ];
+
         if ($id == 'new') {
             $role = new Roles();
         } else {
-            $role = Roles::findById($id);
+            $role = Roles::findFirst($params);
         }
 
         if (!$role) {
@@ -166,21 +207,13 @@ class AdminController extends Controller
             Response::redirect('admin/roles');
         }
 
-        $params = [
-            'order' => 'id DESC'
-        ];
-        $params = Roles::mergeWithPagination($params);
-
         if ($request->isPost()) {
             Session::csrfCheck();
-            $fields = ['role', 'doctype', 'read', 'write', 'delete'];
+            $fields = ['role', 'doctype'];
             foreach ($fields as $field) {
                 $role->{$field} = strtolower($request->get($field));
             }
             $role->role_id = GenerateToken::randomString(60);
-            $role->read = $role->read ? 1 : 0;
-            $role->write = $role->write ? 1 : 0;
-            $role->delete = $role->delete ? 1 : 0;
 
             if ($role->save()) {
                 Session::msg('Roles Saved Successfully', 'success');

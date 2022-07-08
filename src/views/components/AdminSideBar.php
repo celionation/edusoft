@@ -38,12 +38,13 @@ use core\helpers\Navigation;
         </h6>
         <ul class="nav flex-column mb-2">
             <?= Navigation::navItem('admin/admission', 'Admission') ?>
+            <?= Navigation::navItem('admin/lecturers', 'Lecturers') ?>
         </ul>
     </div>
 
     <hr class="divider">
 
-    <div class="dropdown fixed-bottom">
+    <div class="dropdown">
         <a href="#" class="d-flex align-items-center nav-link text-decoration-none dropdown-toggle" id="dropupUser" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="/assets/img/user_male.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
             <strong>mdo</strong>

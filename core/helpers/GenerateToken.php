@@ -109,4 +109,17 @@ class GenerateToken
         }
         return $prefix . ':'.  strtolower($text) . time();
     }
+
+    public static function RandomNumber($length): string
+    {
+        $array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        $text = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $random = rand(0, 9);
+            $text .= $array[$random];
+        }
+        return $text;
+    }
 }

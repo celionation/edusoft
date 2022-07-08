@@ -2,7 +2,7 @@
 
 use core\forms\Form;
 
-$this->title = "Admission";
+$this->title = "Lecturers";
 
 ?>
 
@@ -13,10 +13,10 @@ $this->title = "Admission";
         <div class="card">
             <div class="card-body">
                 <div class="text-end">
-                    <a class="btn btn-primary btn-sm" href="/admin/admission/lists">Admission Lists</a>
+                    <a class="btn btn-primary btn-sm" href="/admin/lecturers/lists">Lecturers Lists</a>
                 </div>
                 <small class="text-danger">
-                    Select Faculty First To Process Admission For new Candidate.
+                    Select Faculty First To Add New Lecturer.
                 </small>
                 <form action="" method="post">
                     <?= Form::csrfField(); ?>
