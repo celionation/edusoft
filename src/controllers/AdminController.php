@@ -15,6 +15,7 @@ use core\helpers\FileUpload;
 use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
 use src\models\Admissions;
+use src\models\Lecturers;
 use src\models\Levels;
 
 class AdminController extends Controller
@@ -117,6 +118,32 @@ class AdminController extends Controller
             $user->email = $admission->email;
         }
 
+        // For Registering a new Lecturer
+        if (isset($_GET['lecturer_no'])) {
+            $roles = Roles::find([
+                'conditions' => "role LIKE '%lecturer%' OR role LIKE 'prof%'",
+                'order' => 'role'
+            ]);
+            $roleOptions = ['' => '---'];
+            foreach ($roles as $role) {
+                $roleOptions[$role->role] = $role->role;
+            }
+
+            $lecturerNo = $request->sanitize($_GET['lecturer_no']);
+            $admParams = [
+                'columns' => "surname, firstname, lastname, email, lecturer_no",
+                'conditions' => "lecturer_no = :lecturer_no",
+                'bind' => ['lecturer_no' => $lecturerNo],
+            ];
+
+            $lecturer = Lecturers::findFirst($admParams);
+
+            $user->surname = $lecturer->surname;
+            $user->firstname = $lecturer->firstname;
+            $user->lastname = $lecturer->lastname;
+            $user->email = $lecturer->email;
+        }
+
         if ($request->isPost()) {
             Session::csrfCheck();
             $fields = ['surname', 'firstname', 'lastname', 'email', 'acl', 'gender', 'state', 'country', 'address', 'password', 'confirmPassword'];
@@ -127,6 +154,9 @@ class AdminController extends Controller
 
             if(isset($_GET['matriculation_no'])) {
                 $user->code_id = $admission->matriculation_no;
+            }
+            if(isset($_GET['lecturer_no'])) {
+                $user->code_id = $lecturer->lecturer_no;
             }
 
             $upload = new FileUpload('img');

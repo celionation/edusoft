@@ -13,7 +13,11 @@ $this->title = "Lecturers";
         <div class="card">
             <div class="card-body">
                 <div class="text-end">
-                    <a class="btn btn-primary btn-sm" href="/admin/lecturers/lists">Lecturers Lists</a>
+                    <a class="btn btn-primary btn-sm" href="/admin/lecturers/lists">Lecturers Lists
+                        <?php if ($lecturersCount > 0) : ?>
+                            <span class="badge bg-danger rounded-circle"><?= $lecturersCount ?></span>
+                        <?php endif; ?>
+                    </a>
                 </div>
                 <small class="text-danger">
                     Select Faculty First To Add New Lecturer.

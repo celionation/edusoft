@@ -44,6 +44,10 @@ class AdmissionController extends Controller
             $facultyOptions[$fac->faculty] = $fac->faculty;
         }
 
+        $params = [
+            'conditions' => "status = 'progress'",
+        ];
+
         if($request->isPost()) {
             Session::csrfCheck();
             $faculty = $request->get('faculty');
@@ -59,6 +63,7 @@ class AdmissionController extends Controller
         $view = [
             'errors' => [],
             'faculty' => $facultyOptions,
+            'admissionCount' => Admissions::findTotal($params),
         ];
 
         return View::make('pages/admin/admission/admission', $view);

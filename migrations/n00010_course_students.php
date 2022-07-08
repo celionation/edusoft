@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Class n0007_courses
+ * Class n00010_course_students
  * 
  * @author Celio Natti <Celionatti@gmail.com>
  * @package Laraton Migrations
@@ -11,25 +11,20 @@ declare(strict_types=1);
  * @copyright 2022 Laraton
  */
 
-class n0007_courses
+class n00010_course_students
 {
     public function up()
     {
         $db = \core\Application::$app->db;
-        $SQL = "CREATE TABLE courses ( 
+        $SQL = "CREATE TABLE course_students ( 
             id INT NOT NULL AUTO_INCREMENT,
             created_at DATETIME NULL DEFAULT CURRENT_TIMESTAMP ,
             updated_at DATETIME NULL ,
-            `course_id` VARCHAR(10) NULL,
-            `course` VARCHAR(100) NULL,
-            `department` VARCHAR(100) NULL,
-            `lecturer` VARCHAR(100) NULL,
-            `ass_lecturer` VARCHAR(100) NULL,
-            PRIMARY KEY (id), 
-            INDEX course (course), 
-            INDEX department (department), 
-            INDEX lecturer (lecturer), 
-            INDEX ass_lecturer (ass_lecturer) 
+            `cs_id` VARCHAR(10) NULL,
+            `course_id` VARCHAR(100) NOT NULL,
+            `user_id` VARCHAR(100) NOT NULL,
+            `status` VARCHAR(20) NULL DEFAULT 'active',
+            PRIMARY KEY (id)  
             ) ENGINE = InnoDB;";
         $db->_dbh->exec($SQL);
     }
@@ -37,7 +32,7 @@ class n0007_courses
     public function down()
     {
         $db = \core\Application::$app->db;
-        $SQL = "DROP TABLE courses";
+        $SQL = "DROP TABLE course_students";
         $db->_dbh->exec($SQL);
     }
 }

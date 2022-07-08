@@ -45,6 +45,10 @@ class LecturerController extends Controller
             $facultyOptions[$fac->faculty] = $fac->faculty;
         }
 
+        $params = [
+            'conditions' => "status = 'active'",
+        ];
+
         if ($request->isPost()) {
             Session::csrfCheck();
             $faculty = $request->get('faculty');
@@ -60,6 +64,7 @@ class LecturerController extends Controller
         $view = [
             'errors' => [],
             'faculty' => $facultyOptions,
+            'lecturersCount' => Lecturers::findTotal($params),
         ];
 
         return View::make('pages/admin/lecturers/lecturers', $view);
@@ -167,19 +172,17 @@ class LecturerController extends Controller
         $id = $request->getParam('id');
 
         $params = [
-            'conditions' => "admission_id = :admission_id",
-            'bind' => ['admission_id' => $id]
+            'conditions' => "lecturer_id = :lecturer_id",
+            'bind' => ['lecturer_id' => $id]
         ];
 
-        $admission = Admissions::findFirst($params);
+        $lecturer = Lecturers::findFirst($params);
 
-        if ($admission) {
-            Session::msg("Admission Deleted Successfully.", 'success');
-            unlink(Application::$ROOT_DIR . '/' . $admission->result_file);
-            unlink(Application::$ROOT_DIR . '/' . $admission->dob_file);
-            $admission->delete();
+        if ($lecturer) {
+            Session::msg("Lecturer Deleted Successfully.", 'success');
+            $lecturer->delete();
         }
-        Response::redirect('admin/admission');
+        Response::redirect('admin/lecturers');
     }
 
 }
