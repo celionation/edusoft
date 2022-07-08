@@ -39,6 +39,7 @@ use core\helpers\Navigation;
         <ul class="nav flex-column mb-2">
             <?= Navigation::navItem('admin/admission', 'Admission') ?>
             <?= Navigation::navItem('admin/lecturers', 'Lecturers') ?>
+            <?= Navigation::navItem('admin/courses', 'Courses') ?>
         </ul>
     </div>
 

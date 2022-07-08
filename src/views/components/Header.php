@@ -1,5 +1,8 @@
 <?php
 
+global $currentUser;
+
+use core\helpers\Navigation;
 
 ?>
 
@@ -15,29 +18,27 @@
         </button>
         <div class="collapse navbar-collapse text-center" id="navbarCollapse">
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contact</a>
-                </li>
+                <?= Navigation::navItem('', 'Home') ?>
+                <?= Navigation::navItem('contact', 'Contact') ?>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Portals</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown04">
-                        <li><a class="dropdown-item" href="/students_portal">Students</a></li>
-                        <li><a class="dropdown-item" href="/staffs_portal">Staff's</a></li>
+                        <?= Navigation::navItem('students_portal', 'Students', true, true) ?>
+                        <hr class="dropdown-divider text-danger">
+                        <?= Navigation::navItem('staffs_portal', 'Staff\'s', true, true) ?>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Misc Portal</a>
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Ass Portal</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown04">
-                        <li><a class="dropdown-item" href="/cont_asses">Cont.Asses</a></li>
-                        <li><a class="dropdown-item" href="/exam">Exam</a></li>
+                        <?= Navigation::navItem('cont_asses', 'Cont.Asses', true) ?>
+                        <?= Navigation::navItem('exam', 'Exam', true) ?>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
+                <?php if($currentUser): ?>
+                    <?= Navigation::navItem('logout', 'Logout') ?>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" id="search-btn"><span class="fas fa-search"></span></a>
                 </li>

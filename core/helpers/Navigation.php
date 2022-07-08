@@ -31,28 +31,30 @@ class Navigation
         return "<a class=\"{$linkClass}{$class}\" href=\"{$link}\" >{$label}</a>";
     }
 
-    public static function navItem($link, $label, $isDropdownItem = false, $page = '')
+    public static function navItem($link, $label, $isDropdownItem = false, $target = false)
     {
         $active = self::isCurrentPage($link);
         $class = self::activeClass($link);
+        $target = $target ? '_blank' : '';
         $linkClass = $isDropdownItem ? 'dropdown-item' : 'nav-link';
         $linkClass .= $active && $isDropdownItem ? " active" : "";
         $link =  '/' . $link;
         $html = "<li class=\"nav-item\">";
-        $html .= "<a class=\"{$linkClass}{$class}\" href=\"{$link}\" >{$label}</a>";
+        $html .= "<a class=\"{$linkClass}{$class}\" href=\"{$link}\" target=\"{$target}\" >{$label}</a>";
         $html .= "</li>";
         return $html;
     }
 
-    public static function navItemIcon($link, $label, $icon = '', $isDropdownItem = false): string
+    public static function navItemIcon($link, $label, $icon = '', $isDropdownItem = false, $target = false): string
     {
         $active = self::isCurrentPage($link);
         $class = self::activeClass($link);
+        $target = $target ? '_blank' : '';
         $linkClass = $isDropdownItem ? 'dropdown-item' : 'nav-link';
         $linkClass .= $active && $isDropdownItem ? " active" : "";
         $link =  '/' . $link;
         $html = "<li class=\"nav-item\" data-bs-toggle=\"tooltip\" data-placement=\"right\" title=\"{$label}\">";
-        $html .= "<a class=\"{$linkClass}{$class}\" href=\"{$link}\" ><i class=\"{$icon}\"></i><span class=\"nav-link-text\">{$label}</span></a>";
+        $html .= "<a class=\"{$linkClass}{$class}\" href=\"{$link}\" target=\"{$target}\" ><i class=\"{$icon}\"></i><span class=\"nav-link-text\">{$label}</span></a>";
         $html .= "</li>";
         return $html;
     }

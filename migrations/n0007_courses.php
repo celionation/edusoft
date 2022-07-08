@@ -23,6 +23,7 @@ class n0007_courses
             `course_id` VARCHAR(10) NULL,
             `course` VARCHAR(100) NULL,
             `department` VARCHAR(100) NULL,
+            `faculty` VARCHAR(100) NULL,
             `lecturer` VARCHAR(100) NULL,
             `ass_lecturer` VARCHAR(100) NULL,
             PRIMARY KEY (id), 

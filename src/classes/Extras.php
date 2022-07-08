@@ -2,6 +2,8 @@
 
 namespace src\classes;
 
+use src\models\Courses;
+
 class Extras
 {
     public static function GetImage($image, $gender = 'male')
@@ -13,5 +15,26 @@ class Extras
             }
         }
         return $image;
+    }
+
+    public static function getAssLeturer($no)
+    {
+        $params = [
+            'columns' => "courses.*, lecturers.surname, lecturers.firstname, lecturers.position",
+            'conditions' => "courses.ass_lecturer = :ass_lecturer",
+            'bind' => ['ass_lecturer' => $no],
+            'joins' => [
+                ['lecturers', 'courses.ass_lecturer = lecturers.lecturer_no'],
+            ],
+            'order' => 'courses.course DESC'
+        ];
+
+        $list = Courses::findFirst($params);
+        
+        if($list == NULL) {
+            return '---';
+        }
+
+        return $list->position . '.' . $list->surname . ' ' . $list->firstname;
     }
 }

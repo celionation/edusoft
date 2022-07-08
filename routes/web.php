@@ -4,6 +4,7 @@ use src\controllers\AuthController;
 use src\controllers\DocsController;
 use src\controllers\SiteController;
 use src\controllers\AdminController;
+use src\controllers\CourseController;
 use src\controllers\PortalController;
 use src\controllers\LecturerController;
 use src\controllers\AdmissionController;
@@ -66,9 +67,12 @@ $app->router->get('/admin/departments', [DocsController::class, 'departments']);
 $app->router->get('/admin/department/create/{id}', [DocsController::class, 'createDepartment']);
 $app->router->post('/admin/department/create/{id}', [DocsController::class, 'createDepartment']);
 //Courses
-$app->router->get('/admin/courses', [DocsController::class, 'courses']);
-$app->router->get('/admin/course/create/{id}', [DocsController::class, 'createCourse']);
-$app->router->post('/admin/course/create/{id}', [DocsController::class, 'createCourse']);
+$app->router->get('/admin/courses', [CourseController::class, 'courses']);
+$app->router->post('/admin/courses', [CourseController::class, 'courses']);
+$app->router->get('/admin/courses/lists', [CourseController::class, 'courseLists']);
+$app->router->get('/admin/courses/{id}', [CourseController::class, 'createCourse']);
+$app->router->post('/admin/courses/{id}', [CourseController::class, 'createCourse']);
+$app->router->get('/admin/courses/delete/{id}', [CourseController::class, 'deleteCourse']);
 
 //Users
 $app->router->get('/admin/users', [AdminController::class, 'users']);

@@ -23,6 +23,18 @@ use core\Config;
     <link rel="stylesheet" href="<?= asset('/assets/css/style.css') ?>">
     <title>EduSoft | <?= $this->title ?></title>
     <script src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
+    <style>
+        .nav-item a:hover {
+            border-bottom: 2px solid red;
+            padding-bottom: 2px;
+            transition: 0.3s all ease;
+        }
+
+        .active {
+            border-bottom: 2px solid red;
+            padding-bottom: 2px;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,7 +43,6 @@ use core\Config;
     <main class="container-fluid mt-2 mb-5">
         {{content}}
     </main>
-    <hr class="mb-5">
     <?php component('Footer') ?>
 
     <script type="application/javascript" src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
