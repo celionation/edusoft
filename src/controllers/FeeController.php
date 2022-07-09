@@ -13,10 +13,9 @@ use src\models\Courses;
 use src\models\Faculties;
 use src\classes\Permission;
 use src\models\Departments;
-use src\models\Lecturers;
 use src\models\Levels;
 
-class CourseController extends Controller
+class FeeController extends Controller
 {
     /**
      * @throws Exception
@@ -32,7 +31,7 @@ class CourseController extends Controller
         Permission::permRedirect(['admin', 'registrar'], '');
     }
 
-    public function courses(Request $request)
+    public function fees(Request $request)
     {
         $faculties = Faculties::find(['order' => 'faculty']);
         $facultyOptions = ['' => '---'];
@@ -65,7 +64,7 @@ class CourseController extends Controller
         return View::make('pages/admin/courses/courses', $view);
     }
 
-    public function createCourse(Request $request)
+    public function createFee(Request $request)
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
@@ -107,7 +106,7 @@ class CourseController extends Controller
         ]);
         $lectOptions = ['' => '---'];
         foreach ($lects as $lect) {
-            $lectOptions[$lect->lecturer_no] = $lect->position . '.'. $lect->surname . ' ' . $lect->firstname;
+            $lectOptions[$lect->lecturer_no] = $lect->position . '.' . $lect->surname . ' ' . $lect->firstname;
         }
 
         if ($request->isPost()) {
@@ -136,10 +135,10 @@ class CourseController extends Controller
         return View::make('pages/admin/courses/course', $view);
     }
 
-    public function courseLists(Request $request): View
+    public function feeLists(Request $request): View
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
-        
+
         $params = [
             'columns' => "courses.*, lecturers.surname, lecturers.firstname, lecturers.position",
             'conditions' => "courses.lecturer = lecturers.lecturer_no",
@@ -156,7 +155,7 @@ class CourseController extends Controller
         return View::make('pages/admin/courses/lists', $view);
     }
 
-    public function deleteCourse(Request $request)
+    public function deleteFee(Request $request)
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
@@ -174,26 +173,6 @@ class CourseController extends Controller
             $course->delete();
         }
         Response::redirect('admin/courses');
-    }
-
-    public function coursePreview(Request $request)
-    {
-        Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
-
-        $params = [
-            'columns' => "courses.*, lecturers.surname, lecturers.firstname, lecturers.position",
-            'conditions' => "courses.lecturer = lecturers.lecturer_no",
-            'joins' => [
-                ['lecturers', 'courses.lecturer = lecturers.lecturer_no'],
-            ],
-            'order' => 'courses.course_code'
-        ];
-
-        $view = [
-            'courseLists' => Courses::find($params),
-        ];
-
-        return View::make('pages/admin/courses/preview', $view);
     }
 
 }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Class n0008_admissions
+ * Class n00011_students
  * 
  * @author Celio Natti <Celionatti@gmail.com>
  * @package Laraton Migrations
@@ -11,49 +11,38 @@ declare(strict_types=1);
  * @copyright 2022 Laraton
  */
 
-class n0008_admissions
+class n00011_students
 {
     public function up()
     {
         $db = \core\Application::$app->db;
-        $SQL = "CREATE TABLE admissions ( 
+        $SQL = "CREATE TABLE students ( 
             id INT NOT NULL AUTO_INCREMENT,
             created_at DATETIME NULL DEFAULT CURRENT_TIMESTAMP ,
             updated_at DATETIME NULL ,
-            `admission_id` VARCHAR(10) NULL,
+            `student_id` VARCHAR(10) NOT NULL,
             `ref_no` VARCHAR(20) NOT NULL,
-            `degree` VARCHAR(6) NOT NULL,
-            `matriculation_no` VARCHAR(20) NULL,
-            `jamb_reg_no` VARCHAR(20) NULL,
-            `entry_mode` VARCHAR(10) NULL DEFAULT 'jamb',
+            `fee_amount` BIGINT NOT NULL,
+            `matriculation_no` VARCHAR(20) NOT NULL,
+            `degree` VARCHAR(10) NOT NULL,
             `faculty` VARCHAR(100) NOT NULL,
             `department` VARCHAR(100) NOT NULL,
-            `level` VARCHAR(10) NULL,
-            `duration` VARCHAR(10) NOT NULL,
+            `level` VARCHAR(10) NOT NULL,
             `surname` VARCHAR(100) NOT NULL,
             `firstname` VARCHAR(100) NOT NULL,
             `lastname` VARCHAR(100) NOT NULL,
             `email` VARCHAR(200) NOT NULL,
             `phone` VARCHAR(20) NOT NULL,
             `dob` DATE NULL,
-            `martial_status` VARCHAR(10) NOT NULL,
-            `guardian_name` VARCHAR(100) NULL,
-            `guardian_phone` VARCHAR(20) NULL,
-            `kin_name` VARCHAR(100) NULL,
-            `kin_phone` VARCHAR(20) NULL,
-            `kin_email` VARCHAR(200) NULL,
-            `result_file` VARCHAR(300) NULL,
-            `dob_file` VARCHAR(300) NULL,
-            `status` VARCHAR(10) NULL DEFAULT 'progress',
+            `standing` VARCHAR(20) NULL DEFAULT 'good',
+            `ass_permission` VARCHAR(20) NULL DEFAULT 'declined',
             PRIMARY KEY (id), 
-            INDEX admission_id (admission_id), 
             INDEX ref_no (ref_no), 
             INDEX matriculation_no (matriculation_no), 
             INDEX faculty (faculty), 
-            INDEX departments (departments), 
+            INDEX department (department), 
             INDEX surname (surname), 
-            INDEX entry_mode (entry_mode), 
-            INDEX degree (degree) 
+            INDEX level (level) 
             ) ENGINE = InnoDB;";
         $db->_dbh->exec($SQL);
     }
@@ -61,7 +50,7 @@ class n0008_admissions
     public function down()
     {
         $db = \core\Application::$app->db;
-        $SQL = "DROP TABLE admissions";
+        $SQL = "DROP TABLE students";
         $db->_dbh->exec($SQL);
     }
 }

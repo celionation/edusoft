@@ -84,14 +84,15 @@ class Form
      * @param array $errors
      * @return string
      */
-    public static function checkInput($label, $id, string $checked = '', array $inputAttrs = [], array $wrapperAttrs = [], array $errors = []): string
+    public static function checkInput($label, $id, string $value = '', array $inputAttrs = [], array $wrapperAttrs = [], array $errors = [], $checked = false): string
     {
         $inputAttrs = self::appendErrors($id, $inputAttrs, $errors);
         $wrapperStr = self::processAttrs($wrapperAttrs);
         $inputStr = self::processAttrs($inputAttrs);
-        $checkedStr = $checked == 'on' ? "checked" : "";
+        $checked = $checked ? 'checked' : '';
+        $checkedStr = $value == 'on' ? "checked" : "";
         $html = "<div $wrapperStr>";
-        $html .= "<input type=\"checkbox\" id=\"$id\" name=\"$id\" $inputStr $checkedStr>";
+        $html .= "<input type=\"checkbox\" id=\"$id\" name=\"$id\" $inputStr $checkedStr $checked>";
         $html .= "<label class=\"form-check-label\" for=\"$id\">$label</label></div>";
         return $html;
     }

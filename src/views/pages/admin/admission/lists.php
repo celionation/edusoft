@@ -11,41 +11,55 @@ $this->title = "Admission Lists";
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2 class="">All Admission Lists</h2>
+                    <?php if (!isset($_GET['list'])) : ?>
+                        <h5 class="text-muted">Admission on Progress</h5>
+                        <div>
+                            <a href="/admin/admission/lists/admitted?list=admitted" class="btn btn-sm btn-primary">Admitted Lists</a>
+                        </div>
+                    <?php else : ?>
+                        <h5 class="text-muted">Admitted Students</h5>
+                        <div>
+                            <a href="/admin/admission/lists" class="btn btn-sm btn-info">Progress Lists</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <hr class="mt-1">
 
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Faculty</th>
-                            <th scope="col">Department</th>
-                            <th scope="col">Degree</th>
-                            <th scope="col" class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($admissionLists as $key => $admList) : ?>
+                <?php if ($admissionLists) : ?>
+                    <table class="table table-striped table-hover">
+                        <thead>
                             <tr>
-                                <th scope="row"><?= $key + 1 ?></th>
-                                <td class="text-capitalize"><?= $admList->surname . ' ' . $admList->firstname . ' ' . $admList->lastname ?></td>
-                                <td><?= $admList->faculty ?></td>
-                                <td class="text-capitalize"><?= $admList->department ?></td>
-                                <td class="text-capitalize"><?= $admList->degree ?></td>
-                                <td class="text-end">
-                                    <?php if (!empty($admList->matriculation_no)) : ?>
-                                        <a href="/admin/users/create/new?matriculation_no=<?= $admList->matriculation_no ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Admit Student"><i class="fas fa-check-circle"></i></a>
-                                    <?php endif; ?>
-                                    <a href="/admin/admission/<?= $admList->admission_id ?>?faculty=<?= $admList->faculty ?>" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteList('<?= $admList->admission_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Faculty</th>
+                                <th scope="col">Department</th>
+                                <th scope="col">Degree</th>
+                                <th scope="col" class="text-end">Actions</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($admissionLists as $key => $admList) : ?>
+                                <tr>
+                                    <th scope="row"><?= $key + 1 ?></th>
+                                    <td class="text-capitalize"><?= $admList->surname . ' ' . $admList->firstname . ' ' . $admList->lastname ?></td>
+                                    <td><?= $admList->faculty ?></td>
+                                    <td class="text-capitalize"><?= $admList->department ?></td>
+                                    <td class="text-capitalize"><?= $admList->degree ?></td>
+                                    <td class="text-end">
+                                        <?php if (!empty($admList->matriculation_no) && $admList->status != 'progress') : ?>
+                                            <a href="/admin/admission/verify/<?= $admList->matriculation_no ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Admit Student"><i class="fas fa-check-circle"></i></a>
+                                        <?php endif; ?>
+                                        <a href="/admin/admission/<?= $admList->admission_id ?>?faculty=<?= $admList->faculty ?>" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteList('<?= $admList->admission_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else : ?>
+                    <h5 class="text-center text-muted">No Students data yet!.</h5>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -16,10 +16,14 @@ class Courses extends Model
     {
         $this->timeStamps();
 
-        $this->runValidation(new RequiredValidator($this, ['field' => 'course', 'msg' => 'Course is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'course_title', 'msg' => 'Course Title is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'course_code', 'msg' => 'Course Code is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'course_credit', 'msg' => 'Course Credit is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'course_type', 'msg' => 'Course Type is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'semester', 'msg' => 'Semester is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'level', 'msg' => 'Level is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'lecturer', 'msg' => 'Lecturer is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'department', 'msg' => 'Department is required']));
-        $this->runValidation(new RequiredValidator($this, ['field' => 'faculty', 'msg' => 'Faculty is required']));
         $this->runValidation(new UniqueValidator($this, ['field' => 'course', 'msg' => 'That Course already Exists.']));
 
         if ($this->isNew()) {

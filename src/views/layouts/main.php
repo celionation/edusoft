@@ -2,6 +2,7 @@
 
 
 use core\Config;
+use core\Session;
 
 
 ?>
@@ -41,6 +42,7 @@ use core\Config;
 
     <?php component('Header') ?>
     <main class="container-fluid mt-2 mb-5">
+        <?= Session::displaySessionAlerts() ?>
         {{content}}
     </main>
     <?php component('Footer') ?>

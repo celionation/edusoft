@@ -26,7 +26,7 @@ class Extras
             'joins' => [
                 ['lecturers', 'courses.ass_lecturer = lecturers.lecturer_no'],
             ],
-            'order' => 'courses.course DESC'
+            'order' => 'courses.course_code'
         ];
 
         $list = Courses::findFirst($params);

@@ -43,7 +43,18 @@ class AuthController extends Controller
                         $isError = false;
                         $remember = $request->get('remember') == 'on';
                         $u->login($remember);
-                        Response::redirect('');
+                        switch ($_GET['rd']) {
+                            case 'students_portal':
+                                Response::redirect('students_portal');
+                                break;
+                            case 'staff_portal':
+                                Response::redirect('staffs_portal');
+                                break;
+                            default:
+                                Response::redirect('');
+                                break;
+                        }
+                        // Response::redirect('');
                     }
                 }
             }

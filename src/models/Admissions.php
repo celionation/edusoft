@@ -29,6 +29,7 @@ class Admissions extends Model
         $this->runValidation(new RequiredValidator($this, ['field' => 'department', 'msg' => 'Department is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'degree', 'msg' => 'Degree is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'entry_mode', 'msg' => 'Entry Mode is required']));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'level', 'msg' => 'Level is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'status', 'msg' => 'Status is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'surname', 'msg' => 'Surname is required']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'firstname', 'msg' => 'FirstName is required']));

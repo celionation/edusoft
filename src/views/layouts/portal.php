@@ -49,10 +49,10 @@ use core\Session;
 </head>
 
 <body>
-    <?php component('AdminHead') ?>
+    <?php component('PortalHead') ?>
     <div class="container-fluid">
         <div class="row">
-            <?php component('AdminSideBar') ?>
+            <?php component('PortalSideBar') ?>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <?= Session::displaySessionAlerts() ?>
                 {{content}}

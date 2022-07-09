@@ -46,6 +46,9 @@ $this->title = "Admission Form";
                             <?= Form::inputField('Matriculation No', 'matriculation_no', $admission->matriculation_no ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
+                            <?= Form::selectField('Level', 'level', $admission->level ?? '', $levelOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                        </div>
+                        <div class="col-md-4">
                             <?= Form::selectField('Status', 'status', $admission->status ?? '', $statusOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                     </div>

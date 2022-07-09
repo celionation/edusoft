@@ -25,13 +25,25 @@ $this->title = "Admission Form";
                             File Inputs <span class="text-danger">*</span>
                         </small>
                         <div class="col-md-4">
-                            <?= Form::inputField('Course', 'course', $course->course ?? '', ['class' => 'form-control', 'type' => 'text'], ['class' => 'col mb-3'], $errors); ?>
+                            <?= Form::inputField('Course Title', 'course_title', $course->course_title ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'Introduction to Marketing.'], ['class' => 'col mb-3'], $errors); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?= Form::inputField('Course Code', 'course_code', $course->course_code ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'CHS 214, MAS 401'], ['class' => 'col mb-3'], $errors); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?= Form::inputField('Course Credit', 'course_credit', $course->course_credit ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => '3, 6'], ['class' => 'col mb-3'], $errors); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?= Form::inputField('Course Type', 'course_type', $course->course_type ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'Compulsory, Elective'], ['class' => 'col mb-3'], $errors); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?= Form::inputField('Semester', 'semester', $course->semester ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'First, Second'], ['class' => 'col mb-3'], $errors); ?>
                         </div>
                         <div class="col-md-4">
                             <?= Form::selectField('Department', 'department', $course->department ?? '', $deptOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
-                            <?= Form::selectField('Faculty', 'faculty', $course->faculty ?? '', $facOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                            <?= Form::selectField('Level', 'level', $course->level ?? '', $levelOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
                         </div>
                         <div class="col-md-4">
                             <?= Form::selectField('Lecturer', 'lecturer', $course->lecturer ?? '', $lectOpt, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>

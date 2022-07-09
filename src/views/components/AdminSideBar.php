@@ -26,6 +26,7 @@ use core\helpers\Navigation;
         </h6>
         <ul class="nav flex-column mb-2">
             <?= Navigation::navItem('admin/users', 'Users') ?>
+            <?= Navigation::navItem('admin/students', 'Students') ?>
             <?= Navigation::navItem('admin/roles', 'Roles') ?>
             <?= Navigation::navItem('admin/levels/new', 'Institute Levels') ?>
         </ul>
@@ -45,19 +46,7 @@ use core\helpers\Navigation;
 
     <hr class="divider">
 
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center nav-link text-decoration-none dropdown-toggle" id="dropupUser" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="/assets/img/user_male.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong>mdo</strong>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropupUser">
-            <li><a class="dropdown-item" href="#">New project...</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li>
-                <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
-        </ul>
-    </div>
+    <ul class="nav flex-column mb-2">
+        <?= Navigation::navItemIcon('', 'Back Home', 'fas fa-chevron-left') ?>
+    </ul>
 </nav>

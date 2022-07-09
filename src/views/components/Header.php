@@ -24,9 +24,15 @@ use core\helpers\Navigation;
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Portals</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown04">
-                        <?= Navigation::navItem('students_portal', 'Students', true, true) ?>
-                        <hr class="dropdown-divider text-danger">
-                        <?= Navigation::navItem('staffs_portal', 'Staff\'s', true, true) ?>
+                        <?php if ($currentUser) : ?>
+                            <?= Navigation::navItem('students_portal', 'Students', true) ?>
+                            <hr class="dropdown-divider text-danger">
+                            <?= Navigation::navItem('staffs_portal', 'Staff\'s', true) ?>
+                        <?php else: ?>
+                            <?= Navigation::navItem('login?rd=students_portal', 'Students', true, true) ?>
+                            <hr class="dropdown-divider text-danger">
+                            <?= Navigation::navItem('login?rd=staffs_portal', 'Staff\'s', true, true) ?>
+                        <?php endif; ?>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -36,7 +42,7 @@ use core\helpers\Navigation;
                         <?= Navigation::navItem('exam', 'Exam', true) ?>
                     </ul>
                 </li>
-                <?php if($currentUser): ?>
+                <?php if ($currentUser) : ?>
                     <?= Navigation::navItem('logout', 'Logout') ?>
                 <?php endif; ?>
                 <li class="nav-item">

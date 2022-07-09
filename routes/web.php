@@ -1,13 +1,15 @@
 <?php
 
+use src\controllers\FeeController;
 use src\controllers\AuthController;
 use src\controllers\DocsController;
 use src\controllers\SiteController;
 use src\controllers\AdminController;
 use src\controllers\CourseController;
-use src\controllers\PortalController;
+use src\controllers\StudentController;
 use src\controllers\LecturerController;
 use src\controllers\AdmissionController;
+use src\controllers\StudentPortalController;
 
 
 
@@ -28,7 +30,11 @@ use src\controllers\AdmissionController;
 $app->router->get('/', [SiteController::class, 'index']);
 
 // Portals
-$app->router->get('/students_portal', [PortalController::class, 'students']);
+$app->router->get('/students_portal', [StudentPortalController::class, 'students']);
+$app->router->get('/student/courses', [StudentPortalController::class, 'studentCourses']);
+$app->router->get('/student/courses/registration', [StudentPortalController::class, 'registerCourseSemester']);
+$app->router->post('/student/courses/registration', [StudentPortalController::class, 'registerCourseSemester']);
+$app->router->get('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
 
 
 $app->router->get('/login', [AuthController::class, 'login']);
@@ -44,10 +50,14 @@ $app->router->get('/admin/account', [AdminController::class, 'account']);
 $app->router->get('/admin/admission', [AdmissionController::class, 'admission']);
 $app->router->post('/admin/admission', [AdmissionController::class, 'admission']);
 $app->router->get('/admin/admission/lists', [AdmissionController::class, 'admissionLists']);
+$app->router->get('/admin/admission/lists/admitted', [AdmissionController::class, 'admissionListsAdmitted']);
 $app->router->get('/admin/admission/{id}', [AdmissionController::class, 'createAdmission']);
 $app->router->post('/admin/admission/{id}', [AdmissionController::class, 'createAdmission']);
 $app->router->get('/admin/admission/delete/{id}', [AdmissionController::class, 'deleteAdmission']);
-$app->router->get('/admin/admission/verified/{id}', [AdmissionController::class, 'verified']);
+$app->router->get('/admin/admission/verify/{id}', [AdmissionController::class, 'verify']);
+
+// Students
+$app->router->get('/admin/students', [StudentController::class, 'students']);
 
 //Lecturer
 $app->router->get('/admin/lecturers', [LecturerController::class, 'lecturers']);
@@ -78,6 +88,14 @@ $app->router->get('/admin/courses/delete/{id}', [CourseController::class, 'delet
 $app->router->get('/admin/users', [AdminController::class, 'users']);
 $app->router->get('/admin/users/create/{id}', [AdminController::class, 'createuser']);
 $app->router->post('/admin/users/create/{id}', [AdminController::class, 'createuser']);
+
+// Fees
+$app->router->get('/admin/fees', [FeeController::class, 'fees']);
+$app->router->post('/admin/fees', [FeeController::class, 'fees']);
+$app->router->get('/admin/fees/lists', [FeeController::class, 'feeLists']);
+$app->router->get('/admin/fees/{id}', [FeeController::class, 'createFee']);
+$app->router->post('/admin/fees/{id}', [FeeController::class, 'createFee']);
+$app->router->get('/admin/fees/delete/{id}', [FeeController::class, 'deleteFee']);
 
 //Access Control Roles
 $app->router->get('/admin/roles', [AdminController::class, 'roles']);

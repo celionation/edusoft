@@ -1,0 +1,34 @@
+<?php
+
+use core\helpers\Navigation;
+
+?>
+
+
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <?= Navigation::navItem('students_portal', 'Dashboard') ?>
+            <?= Navigation::navItem('student/courses', 'Courses') ?>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Misc. Section</span>
+            <a class="link-secondary" href="#" aria-label="Miscellaneous">
+                <span data-feather="plus-circle"></span>
+            </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <?= Navigation::navItemIcon('student/payments', 'Payments', 'fas fa-money-check') ?>
+            <?= Navigation::navItemIcon('student/results', 'Results', 'fas fa-chart-bar') ?>
+            <?= Navigation::navItemIcon('student/assessments', 'Assessments', 'fas fa-file-signature') ?> <!-- at dashboard -->
+            <?= Navigation::navItemIcon('admin/helpdesk', 'Help-desk', 'fas fa-question-circle') ?>
+        </ul>
+
+        <hr>
+
+        <ul class="nav flex-column mb-2">
+            <?= Navigation::navItemIcon('', 'Back Home', 'fas fa-chevron-left pe-2') ?>
+        </ul>
+    </div>
+</nav>

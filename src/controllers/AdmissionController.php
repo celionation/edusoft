@@ -19,6 +19,8 @@ use src\models\Departments;
 use core\helpers\FileUpload;
 use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
+use src\models\Levels;
+use src\models\Students;
 
 class AdmissionController extends Controller
 {
@@ -102,9 +104,15 @@ class AdmissionController extends Controller
             $facultyOptions[$fac->faculty] = $fac->faculty;
         }
 
+        $levels = Levels::find(['order' => 'level']);
+        $levelOptions = ['' => '---'];
+        foreach ($levels as $level) {
+            $levelOptions[$level->level] = $level->level;
+        }
+
         if($request->isPost()) {
             Session::csrfCheck();
-            $fields = ['jamb_reg_no', 'duration', 'faculty', 'department', 'degree', 'entry_mode', 'status', 'matriculation_no', 'surname', 'firstname', 'lastname', 'email', 'phone', 'dob', 'martial_status', 'guardian_name', 'guardian_phone', 'kin_name', 'kin_phone', 'kin_email'];
+            $fields = ['jamb_reg_no', 'duration', 'faculty', 'department', 'degree', 'entry_mode', 'status', 'matriculation_no', 'level', 'surname', 'firstname', 'lastname', 'email', 'phone', 'dob', 'martial_status', 'guardian_name', 'guardian_phone', 'kin_name', 'kin_phone', 'kin_email'];
             foreach ($fields as $field) {
                 $admission->{$field} = $request->get($field);
             }
@@ -194,6 +202,7 @@ class AdmissionController extends Controller
                 'progress' => 'Progress',
                 'admitted' => 'Admitted'
             ],
+            'levelOpt' => $levelOptions,
         ];
 
         return View::make('pages/admin/admission/form', $view);
@@ -202,8 +211,25 @@ class AdmissionController extends Controller
     public function admissionLists(Request $request): View
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
+
         $params = [
             'conditions' => "status = 'progress'",
+            'order' => 'surname', 'firstname'
+        ];
+
+        $view = [
+            'admissionLists' => Admissions::find($params),
+        ];
+
+        return View::make('pages/admin/admission/lists', $view);
+    }
+
+    public function admissionListsAdmitted(Request $request): View
+    {
+        Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
+
+        $params = [
+            'conditions' => "status = 'admitted'",
             'order' => 'surname', 'firstname'
         ];
 
@@ -234,6 +260,53 @@ class AdmissionController extends Controller
             $admission->delete();
         }
         Response::redirect('admin/admission');
+    }
+
+    public function verify(Request $request)
+    {
+        $id = $request->getParam('id');
+
+        $student = new Students();
+
+        $stdparams = [
+            'conditions' => "matriculation_no = :matriculation_no",
+            'bind' => ['matriculation_no' => $id],
+        ];
+
+        $params = [
+            'columns' => "ref_no, matriculation_no, degree, faculty, department, level, surname, firstname, lastname, email, phone, dob, status",
+            'conditions' => "matriculation_no = :matriculation_no",
+            'bind' => ['matriculation_no' => $id],
+        ];
+
+        $extStudent = $student::findFirst($stdparams);
+
+        if($extStudent) {
+            Session::msg('Student Already Admitted!.', 'info');
+            Response::redirect('admin/admission/lists/admitted?list=admitted');
+        }
+
+        $admittedStudent = Admissions::findFirst($params);
+
+        $student->ref_no = $admittedStudent->ref_no;
+        $student->matriculation_no = $admittedStudent->matriculation_no;
+        $student->degree = $admittedStudent->degree;
+        $student->faculty = $admittedStudent->faculty;
+        $student->department = $admittedStudent->department;
+        $student->level = $admittedStudent->level;
+        $student->surname = $admittedStudent->surname;
+        $student->firstname = $admittedStudent->firstname;
+        $student->lastname = $admittedStudent->lastname;
+        $student->email = $admittedStudent->email;
+        $student->phone = $admittedStudent->phone;
+        $student->dob = $admittedStudent->dob;
+        $student->standing = 'good';
+        $student->ass_permission = 'declined';
+
+        if($student->save()) {
+            Session::msg('New Student Admitted Successfully', 'success');
+            Response::redirect('admin/admission/lists');
+        }
     }
 
 }
