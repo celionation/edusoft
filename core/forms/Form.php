@@ -55,15 +55,16 @@ class Form
      * @param array $errors
      * @return string
      */
-    public static function selectField($label, $id, $value, $options, array $inputAttrs = [], array $wrapperAttrs = [], array $errors = []): string
+    public static function selectField($label, $id, $value, $options, array $inputAttrs = [], array $wrapperAttrs = [], array $errors = [], $multiple = false): string
     {
         $inputAttrs = self::appendErrors($id, $inputAttrs, $errors);
         $inputAttrs = self::processAttrs($inputAttrs);
         $wrapperStr = self::processAttrs($wrapperAttrs);
+        $multiple = $multiple ? 'multiple' : '';
         $errorMsg = array_key_exists($id, $errors) ? $errors[$id] : "";
         $html = "<div $wrapperStr>";
         $html .= "<label for='$id' class='form-label'>$label</label>";
-        $html .= "<select id='$id' name='$id' $inputAttrs>";
+        $html .= "<select id='$id' name='$id' $inputAttrs, $multiple>";
         foreach ($options as $val => $display) {
             $selected = $val == $value ? ' selected ' : "";
             $html .= "<option value='$val'$selected>$display</option>";
@@ -93,6 +94,18 @@ class Form
         $checkedStr = $value == 'on' ? "checked" : "";
         $html = "<div $wrapperStr>";
         $html .= "<input type=\"checkbox\" id=\"$id\" name=\"$id\" $inputStr $checkedStr $checked>";
+        $html .= "<label class=\"form-check-label\" for=\"$id\">$label</label></div>";
+        return $html;
+    }
+
+    public static function selectCheckInput($label, $id, array $inputAttrs = [], array $wrapperAttrs = [], array $errors = [], $checked = false): string
+    {
+        $inputAttrs = self::appendErrors($id, $inputAttrs, $errors);
+        $wrapperStr = self::processAttrs($wrapperAttrs);
+        $inputStr = self::processAttrs($inputAttrs);
+        $checked = $checked ? 'checked' : '';
+        $html = "<div $wrapperStr>";
+        $html .= "<input type=\"checkbox\" id=\"$id\" name=\"$id\" $inputStr $checked>";
         $html .= "<label class=\"form-check-label\" for=\"$id\">$label</label></div>";
         return $html;
     }

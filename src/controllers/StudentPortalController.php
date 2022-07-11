@@ -9,9 +9,11 @@ use core\Session;
 use core\Response;
 use core\Controller;
 use core\helpers\CoreHelpers;
+use core\helpers\GenerateToken;
 use src\models\Users;
 use src\classes\Permission;
 use src\models\Courses;
+use src\models\CourseStudents;
 
 class StudentPortalController extends Controller
 {
@@ -96,19 +98,46 @@ class StudentPortalController extends Controller
             'order' => 'courses.course_code'
         ];
 
+        /**
+         * Select all form both courses and course_students table to display on table as registered course.
+         */
+        $courseStudentParams = [
+            'columns' => "course_students.*, courses.course_title, courses.course_code, courses.course_credit",
+            'conditions' => "matriculation_no = :matriculation_no AND user_id = :user_id",
+            'joins' => [
+                ['courses', 'course_students.course_id = courses.course_id'],
+            ],
+            'bind' => ['matriculation_no' => $matriculation_no, 'user_id' => $this->currentUser->user_id],
+            'order' => "created_at"
+        ];
+
         $courses = Courses::find($params);
         $courseOptions = ['' => '---'];
         foreach ($courses as $course) {
-            $courseOptions[$course->course_id] = $course->course_code . '' . $course->course_title;
+            $courseOptions[$course->course_id] = $course->course_code . ' ' . $course->course_title;
         }
 
+        $courseStudent = new CourseStudents;
+
         if($request->isPost()) {
-            CoreHelpers::dnd($_POST);
+            Session::csrfCheck();
+            $courseStudent->course_id = $request->get('course_id');
+            $courseStudent->cs_id = GenerateToken::randomString(10);
+            $courseStudent->user_id = $this->currentUser->user_id;
+            $courseStudent->matriculation_no = $this->currentUser->code_id;
+            $courseStudent->status = 'waiting';
+
+            if ($courseStudent->save()) {
+                Session::msg("Course Saved Successfully!.", 'success');
+                Response::redirect("student/courses/registration/new?semester=$semester&matriculation_no=$matriculation_no");
+            }
+
         }
         
         $view = [
-            'errors' => [],
+            'errors' => $courseStudent->getErrors(),
             'courseOptions' => $courseOptions,
+            'courseStdLists' => CourseStudents::find($courseStudentParams),
         ];
 
         return View::make('pages/portals/students/courses/registerCourses', $view);

@@ -24,7 +24,9 @@ class n00010_course_students
             `course_id` VARCHAR(100) NOT NULL,
             `matriculation_no` VARCHAR(20) NOT NULL,
             `user_id` VARCHAR(100) NOT NULL,
-            `status` VARCHAR(20) NULL DEFAULT 'active',
+            `status` VARCHAR(20) NULL DEFAULT 'waiting',
+            `grade` VARCHAR(10) NULL,
+            `result` VARCHAR(100) NULL,
             PRIMARY KEY (id)  
             ) ENGINE = InnoDB;";
         $db->_dbh->exec($SQL);
