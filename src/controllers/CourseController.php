@@ -117,7 +117,7 @@ class CourseController extends Controller
                 $course->{$field} = $request->get($field);
             }
             $course->course = strtolower($request->get('course'));
-            $course->faculty = strtolower($request->get($faculty));
+            $course->faculty = strtolower($faculty);
 
             if ($course->save()) {
                 Session::msg("{$course->course}... Saved Successfully!.", 'success');

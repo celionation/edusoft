@@ -17,6 +17,7 @@ use core\helpers\GenerateToken;
 use src\models\Admissions;
 use src\models\Lecturers;
 use src\models\Levels;
+use src\models\Students;
 
 class AdminController extends Controller
 {
@@ -54,7 +55,7 @@ class AdminController extends Controller
     {
         $params = [
             'conditions' => "acl != 'guests' OR 'student'",
-            'order' => 'lastname', 'firstname'
+            'order' => 'surname', 'firstname'
         ];
 
         $params = Users::mergeWithPagination($params);
@@ -110,12 +111,12 @@ class AdminController extends Controller
                 'bind' => ['matriculation_no' => $matricNo],
             ];
 
-            $admission = Admissions::findFirst($admParams);
+            $student = Students::findFirst($admParams);
 
-            $user->surname = $admission->surname;
-            $user->firstname = $admission->firstname;
-            $user->lastname = $admission->lastname;
-            $user->email = $admission->email;
+            $user->surname = $student->surname;
+            $user->firstname = $student->firstname;
+            $user->lastname = $student->lastname;
+            $user->email = $student->email;
         }
 
         // For Registering a new Lecturer
@@ -153,7 +154,7 @@ class AdminController extends Controller
             $user->user_id = GenerateToken::randomString(60);
 
             if(isset($_GET['matriculation_no'])) {
-                $user->code_id = $admission->matriculation_no;
+                $user->code_id = $student->matriculation_no;
             }
             if(isset($_GET['lecturer_no'])) {
                 $user->code_id = $lecturer->lecturer_no;

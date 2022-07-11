@@ -19,6 +19,7 @@ use src\models\Departments;
 use core\helpers\FileUpload;
 use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
+use src\models\InstituteFees;
 use src\models\Levels;
 use src\models\Students;
 
@@ -224,6 +225,13 @@ class AdmissionController extends Controller
         return View::make('pages/admin/admission/lists', $view);
     }
 
+    
+    /**
+     * To check aleardy admitted Students.
+     *
+     * @param Request $request
+     * @return View
+     */
     public function admissionListsAdmitted(Request $request): View
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
@@ -266,27 +274,51 @@ class AdmissionController extends Controller
     {
         $id = $request->getParam('id');
 
+        if(isset($_GET['matriculation_no'])) {
+            $matriculation_no = $request->sanitize($_GET['matriculation_no']);
+        }
+
         $student = new Students();
 
+        /**
+         * Params is to check existing Student.
+         */
         $stdparams = [
             'conditions' => "matriculation_no = :matriculation_no",
-            'bind' => ['matriculation_no' => $id],
+            'bind' => ['matriculation_no' => $matriculation_no],
         ];
 
         $params = [
             'columns' => "ref_no, matriculation_no, degree, faculty, department, level, surname, firstname, lastname, email, phone, dob, status",
             'conditions' => "matriculation_no = :matriculation_no",
-            'bind' => ['matriculation_no' => $id],
+            'bind' => ['matriculation_no' => $matriculation_no],
         ];
 
         $extStudent = $student::findFirst($stdparams);
 
+        /**
+         * if Student already exists redirect.
+         */
         if($extStudent) {
             Session::msg('Student Already Admitted!.', 'info');
             Response::redirect('admin/admission/lists/admitted?list=admitted');
         }
 
         $admittedStudent = Admissions::findFirst($params);
+
+        /**
+         * feeParams is to get each student fee amount based on department.
+         */
+        $feeParams = [
+            'columns' => "institute_fees.*, admissions.faculty, admissions.department",
+            'conditions' => "institute_fees.level = admissions.level AND institute_fees.faculty = admissions.faculty AND institute_fees.department = :department",
+            'joins' => [
+                ['admissions', 'institute_fees.level = admissions.level'],
+            ],
+            'bind' => ['department' => $admittedStudent->department],
+        ];
+
+        $instAmount = InstituteFees::findFirst($feeParams);
 
         $student->ref_no = $admittedStudent->ref_no;
         $student->matriculation_no = $admittedStudent->matriculation_no;
@@ -300,6 +332,7 @@ class AdmissionController extends Controller
         $student->email = $admittedStudent->email;
         $student->phone = $admittedStudent->phone;
         $student->dob = $admittedStudent->dob;
+        $student->fee_amount = $instAmount->amount ?? 0000;
         $student->standing = 'good';
         $student->ass_permission = 'declined';
 

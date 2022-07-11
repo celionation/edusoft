@@ -8,11 +8,13 @@ use core\Request;
 use core\Session;
 use core\Response;
 use core\Controller;
+use core\helpers\CoreHelpers;
 use src\models\Users;
 use src\models\Courses;
 use src\models\Faculties;
 use src\classes\Permission;
 use src\models\Departments;
+use src\models\InstituteFees;
 use src\models\Levels;
 
 class FeeController extends Controller
@@ -49,19 +51,19 @@ class FeeController extends Controller
 
             if (empty($faculty)) {
                 Session::msg("Please Select faculty!.", 'warning');
-                Response::redirect("admin/courses");
+                Response::redirect("admin/institute_fees");
             }
 
-            Response::redirect("admin/courses/new?faculty=$faculty");
+            Response::redirect("admin/institute_fees/new?faculty=$faculty");
         }
 
         $view = [
             'errors' => [],
             'faculty' => $facultyOptions,
-            'courseCount' => Courses::findTotal($params),
+            'feesCount' => InstituteFees::findTotal($params),
         ];
 
-        return View::make('pages/admin/courses/courses', $view);
+        return View::make('pages/admin/fees/fees', $view);
     }
 
     public function createFee(Request $request)
@@ -71,14 +73,14 @@ class FeeController extends Controller
         $id = $request->getParam('id');
 
         $params = [
-            'conditions' => "course_id = :course_id",
-            'bind' => ['course_id' => $id]
+            'conditions' => "fee_id = :fee_id",
+            'bind' => ['fee_id' => $id]
         ];
 
-        $course = $id == 'new' ? new Courses() : Courses::findFirst($params);
-        if (!$course) {
-            Session::msg("You do not have permission to edit this Course Form", 'info');
-            Response::redirect('admin/courses/lists');
+        $fees = $id == 'new' ? new InstituteFees() : InstituteFees::findFirst($params);
+        if (!$fees) {
+            Session::msg("You do not have permission to edit this Fee Form", 'info');
+            Response::redirect('admin/institute_fees/lists');
         }
 
         $faculty = $request->sanitize($_GET['faculty']);
@@ -99,40 +101,28 @@ class FeeController extends Controller
             $levelOptions[$level->level] = $level->level;
         }
 
-        $lects = Lecturers::find([
-            'conditions' => "faculty = :faculty",
-            'bind' => ['faculty' => $faculty],
-            'order' => 'faculty'
-        ]);
-        $lectOptions = ['' => '---'];
-        foreach ($lects as $lect) {
-            $lectOptions[$lect->lecturer_no] = $lect->position . '.' . $lect->surname . ' ' . $lect->firstname;
-        }
-
         if ($request->isPost()) {
             Session::csrfCheck();
-            $fields = ['course_title', 'course_code', 'course_credit', 'semester', 'course_type', 'department', 'level', 'lecturer', 'ass_lecturer'];
+            $fields = ['amount', 'department', 'level'];
             foreach ($fields as $field) {
-                $course->{$field} = $request->get($field);
+                $fees->{$field} = $request->get($field);
             }
-            $course->course = strtolower($request->get('course'));
-            $course->faculty = strtolower($request->get($faculty));
+            $fees->faculty = strtolower($faculty);
 
-            if ($course->save()) {
-                Session::msg("{$course->course}... Saved Successfully!.", 'success');
-                Response::redirect('admin/courses/lists');
+            if ($fees->save()) {
+                Session::msg("Amount Saved Successfully!.", 'success');
+                Response::redirect('admin/institute_fees/lists');
             }
         }
 
         $view = [
-            'errors' => $course->getErrors(),
-            'course' => $course,
+            'errors' => $fees->getErrors(),
+            'fees' => $fees,
             'levelOpt' => $levelOptions,
             'deptOpt' => $deptOptions,
-            'lectOpt' => $lectOptions,
         ];
 
-        return View::make('pages/admin/courses/course', $view);
+        return View::make('pages/admin/fees/fee', $view);
     }
 
     public function feeLists(Request $request): View
@@ -140,19 +130,14 @@ class FeeController extends Controller
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
         $params = [
-            'columns' => "courses.*, lecturers.surname, lecturers.firstname, lecturers.position",
-            'conditions' => "courses.lecturer = lecturers.lecturer_no",
-            'joins' => [
-                ['lecturers', 'courses.lecturer = lecturers.lecturer_no'],
-            ],
-            'order' => 'courses.course_code'
+            'order' => 'faculty, department'
         ];
 
         $view = [
-            'courseLists' => Courses::find($params),
+            'feeLists' => InstituteFees::find($params),
         ];
 
-        return View::make('pages/admin/courses/lists', $view);
+        return View::make('pages/admin/fees/lists', $view);
     }
 
     public function deleteFee(Request $request)

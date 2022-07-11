@@ -48,7 +48,7 @@ $this->title = "Admission Lists";
                                     <td class="text-capitalize"><?= $admList->degree ?></td>
                                     <td class="text-end">
                                         <?php if (!empty($admList->matriculation_no) && $admList->status != 'progress') : ?>
-                                            <a href="/admin/admission/verify/<?= $admList->matriculation_no ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Admit Student"><i class="fas fa-check-circle"></i></a>
+                                            <a href="/admin/admission/verify/<?= $admList->surname ?>?matriculation_no=<?= $admList->matriculation_no ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Admit Student"><i class="fas fa-check-circle"></i></a>
                                         <?php endif; ?>
                                         <a href="/admin/admission/<?= $admList->admission_id ?>?faculty=<?= $admList->faculty ?>" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
                                         <button class="btn btn-sm btn-danger" onclick="deleteList('<?= $admList->admission_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>

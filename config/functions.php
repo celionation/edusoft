@@ -39,7 +39,7 @@ function formatDollars($dollars): string
 
 function formatNaira($naira): string
 {
-    $formatted = number_format(sprintf('%0.2f', preg_replace("/[^0-9.]/", "", $naira)), 2) . "Naira";
+    $formatted = number_format(sprintf('%0.2f', preg_replace("/[^0-9.]/", "", $naira)), 2) . " (Naira)";
     return $naira < 0 ? "({$formatted})" : "{$formatted}";
 }
 

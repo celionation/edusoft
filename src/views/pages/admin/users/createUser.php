@@ -68,7 +68,13 @@ $this->title = "Admin Users";
                             <button type="submit" class="btn btn-success w-100">Create</button>
                         </div>
                         <div class="col">
-                            <a href="/admin/users" class="btn btn-danger w-100">Cancel</a>
+                            <?php if (isset($_GET['matriculation_no'])) : ?>
+                                <a href="/admin/students" class="btn btn-danger w-100">Cancel</a>
+                            <?php elseif (isset($_GET['lecturer_no'])) : ?>
+                                <a href="/admin/lecturers" class="btn btn-danger w-100">Cancel</a>
+                            <?php else : ?>
+                                <a href="/admin/users" class="btn btn-danger w-100">Cancel</a>
+                            <?php endif; ?>
                         </div>
                     </div>
 

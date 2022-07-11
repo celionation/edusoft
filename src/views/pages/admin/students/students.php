@@ -48,7 +48,7 @@ $this->title = "Admin Users";
                                     <td><?= $student->standing ?></td>
                                     <td><?= $student->ass_permission ?></td>
                                     <td class="text-end">
-                                        <button class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Preview"><i class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#previewStudent"></i></button>
+                                        <a href="/admin/students/profile/<?= $student->student_id ?>?matriculation_no=<?= $student->matriculation_no ?>" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Preview"><i class="fas fa-eye"></i></a>
                                         <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Report Issue"><i class="fas fa-question-circle"></i></a>
                                     </td>
                                 </tr>

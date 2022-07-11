@@ -45,7 +45,7 @@ class StudentPortalController extends Controller
         return View::make('pages/portals/students/courses/courses', $view);
     }
 
-    public function registerCourseSemester(Request $request): View
+    public function selectCourseSemester(Request $request): View
     {
         Permission::permRedirect(['student'], '');
 
@@ -70,7 +70,7 @@ class StudentPortalController extends Controller
             ],
         ];
 
-        return View::make('pages/portals/students/courses/registerCourseSemester', $view);
+        return View::make('pages/portals/students/courses/selectCourseSemester', $view);
     }
 
     public function registerCourses(Request $request)

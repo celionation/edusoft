@@ -8,6 +8,7 @@ use core\Request;
 use core\Session;
 use core\Response;
 use core\Controller;
+use core\helpers\CoreHelpers;
 use src\models\Users;
 use src\classes\Permission;
 use src\models\Students;
@@ -28,7 +29,7 @@ class StudentController extends Controller
         Permission::permRedirect(['admin', 'registrar'], '');
     }
 
-    public function students(Request $request)
+    public function students(Request $request): View
     {
         $params = [
             'order' => 'surname', 'firstname'
@@ -42,6 +43,38 @@ class StudentController extends Controller
         ];
 
         return View::make('pages/admin/students/students', $view);
+    }
+
+    public function studentProfile(Request $request): View
+    {
+        Permission::permRedirect(['admin', 'dean'], 'admin/dashboard');
+
+        $id = $request->getParam('id');
+
+        if(isset($_GET['matriculation_no'])) {
+            $matriculation_no = $request->sanitize($_GET['matriculation_no']);
+        }
+
+        $ExtUserParams = [
+            'conditions' => "code_id = :code_id",
+            'bind' => ['code_id' => $matriculation_no],
+            'order' => "surname, firstname, lastname",
+        ]; // check if student exst in users table to remove verify
+
+        $params = [
+            'conditions' => "student_id = :student_id",
+            'bind' => ['student_id' => $id],
+            'order' => "surname, firstname, lastname",
+        ];
+
+        $extUser = Users::findFirst($ExtUserParams);
+        
+        $view = [
+            'student' => Students::findFirst($params),
+            'extUser' => $extUser,
+        ];
+
+        return View::make('pages/admin/students/profile', $view);
     }
 
 }

@@ -32,8 +32,8 @@ $app->router->get('/', [SiteController::class, 'index']);
 // Portals
 $app->router->get('/students_portal', [StudentPortalController::class, 'students']);
 $app->router->get('/student/courses', [StudentPortalController::class, 'studentCourses']);
-$app->router->get('/student/courses/registration', [StudentPortalController::class, 'registerCourseSemester']);
-$app->router->post('/student/courses/registration', [StudentPortalController::class, 'registerCourseSemester']);
+$app->router->get('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
+$app->router->post('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
 $app->router->get('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
 
 
@@ -58,6 +58,7 @@ $app->router->get('/admin/admission/verify/{id}', [AdmissionController::class, '
 
 // Students
 $app->router->get('/admin/students', [StudentController::class, 'students']);
+$app->router->get('/admin/students/profile/{id}', [StudentController::class, 'studentProfile']);
 
 //Lecturer
 $app->router->get('/admin/lecturers', [LecturerController::class, 'lecturers']);
@@ -90,12 +91,12 @@ $app->router->get('/admin/users/create/{id}', [AdminController::class, 'createus
 $app->router->post('/admin/users/create/{id}', [AdminController::class, 'createuser']);
 
 // Fees
-$app->router->get('/admin/fees', [FeeController::class, 'fees']);
-$app->router->post('/admin/fees', [FeeController::class, 'fees']);
-$app->router->get('/admin/fees/lists', [FeeController::class, 'feeLists']);
-$app->router->get('/admin/fees/{id}', [FeeController::class, 'createFee']);
-$app->router->post('/admin/fees/{id}', [FeeController::class, 'createFee']);
-$app->router->get('/admin/fees/delete/{id}', [FeeController::class, 'deleteFee']);
+$app->router->get('/admin/institute_fees', [FeeController::class, 'fees']);
+$app->router->post('/admin/institute_fees', [FeeController::class, 'fees']);
+$app->router->get('/admin/institute_fees/lists', [FeeController::class, 'feeLists']);
+$app->router->get('/admin/institute_fees/{id}', [FeeController::class, 'createFee']);
+$app->router->post('/admin/institute_fees/{id}', [FeeController::class, 'createFee']);
+$app->router->get('/admin/institute_fees/delete/{id}', [FeeController::class, 'deleteFee']);
 
 //Access Control Roles
 $app->router->get('/admin/roles', [AdminController::class, 'roles']);

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Class n00012_fees
+ * Class n00012_institute_fees
  * 
  * @author Celio Natti <Celionatti@gmail.com>
  * @package Laraton Migrations
@@ -11,16 +11,17 @@ declare(strict_types=1);
  * @copyright 2022 Laraton
  */
 
-class n00012_fees
+class n00012_institute_fees
 {
     public function up()
     {
         $db = \core\Application::$app->db;
-        $SQL = "CREATE TABLE fees ( 
+        $SQL = "CREATE TABLE institute_fees ( 
             id INT NOT NULL AUTO_INCREMENT,
             created_at DATETIME NULL DEFAULT CURRENT_TIMESTAMP ,
             updated_at DATETIME NULL ,
             `fee_id` VARCHAR(10) NULL,
+            `amount` BIGINT NULL,
             `level` VARCHAR(10) NULL,
             `department` VARCHAR(100) NULL,
             `faculty` VARCHAR(100) NULL,
@@ -35,7 +36,7 @@ class n00012_fees
     public function down()
     {
         $db = \core\Application::$app->db;
-        $SQL = "DROP TABLE fees";
+        $SQL = "DROP TABLE institute_fees";
         $db->_dbh->exec($SQL);
     }
 }

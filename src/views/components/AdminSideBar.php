@@ -41,6 +41,7 @@ use core\helpers\Navigation;
             <?= Navigation::navItem('admin/admission', 'Admission') ?>
             <?= Navigation::navItem('admin/lecturers', 'Lecturers') ?>
             <?= Navigation::navItem('admin/courses', 'Courses') ?>
+            <?= Navigation::navItem('admin/institute_fees', 'Institute Fees') ?>
         </ul>
     </div>
 
