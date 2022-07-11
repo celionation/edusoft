@@ -14,7 +14,7 @@ $this->title = "Course Lists";
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
-                <h2 class="">All Course Lists</h2>
+                <a href="/admin/courses" class="btn btn-sm btn-primary"><i class="fas fa-chevron-left"></i> Back</a>
             </div>
 
             <hr class="mt-1">

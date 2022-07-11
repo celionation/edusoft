@@ -35,6 +35,7 @@ $app->router->get('/student/courses', [StudentPortalController::class, 'studentC
 $app->router->get('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
 $app->router->post('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
 $app->router->get('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
+$app->router->post('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
 
 
 $app->router->get('/login', [AuthController::class, 'login']);

@@ -8,8 +8,10 @@ use core\Request;
 use core\Session;
 use core\Response;
 use core\Controller;
+use core\helpers\CoreHelpers;
 use src\models\Users;
 use src\classes\Permission;
+use src\models\Courses;
 
 class StudentPortalController extends Controller
 {
@@ -52,13 +54,14 @@ class StudentPortalController extends Controller
         if ($request->isPost()) {
             Session::csrfCheck();
             $semester = $request->get('semester');
+            $matriculation_no = $this->currentUser->code_id;
 
             if (empty($semester)) {
                 Session::msg("Please Select semester!.", 'warning');
                 Response::redirect("student/courses/registration");
             }
 
-            Response::redirect("student/courses/registration/new?semester=$semester");
+            Response::redirect("student/courses/registration/new?semester=$semester&matriculation_no=$matriculation_no");
         }
         
         $view = [
@@ -77,17 +80,35 @@ class StudentPortalController extends Controller
     {
         Permission::permRedirect(['student'], '');
 
+        $semester = $request->sanitize($_GET['semester']);
+        $matriculation_no = $request->sanitize($_GET['matriculation_no']);
+
+        /**
+         * Params is for getting all course of a particular student and level for registration
+         */
         $params = [
-            'columns' => "courses.*, lecturers.surname, lecturers.firstname, lecturers.position",
-            'conditions' => "courses.lecturer = lecturers.lecturer_no",
+            'columns' => "courses.*, students.level, students.faculty, students.department",
+            'conditions' => "courses.level = students.level AND courses.faculty = students.faculty AND courses.semester = :semester AND students.matriculation_no = :matriculation_no AND courses.course_type IN ('compulsory', 'elective')",
             'joins' => [
-                ['lecturers', 'courses.lecturer = lecturers.lecturer_no'],
+                ['students', 'courses.level = students.level'],
             ],
+            'bind' => ['semester' => $semester, 'matriculation_no' => $matriculation_no],
             'order' => 'courses.course_code'
         ];
+
+        $courses = Courses::find($params);
+        $courseOptions = ['' => '---'];
+        foreach ($courses as $course) {
+            $courseOptions[$course->course_id] = $course->course_code . '' . $course->course_title;
+        }
+
+        if($request->isPost()) {
+            CoreHelpers::dnd($_POST);
+        }
         
         $view = [
             'errors' => [],
+            'courseOptions' => $courseOptions,
         ];
 
         return View::make('pages/portals/students/courses/registerCourses', $view);

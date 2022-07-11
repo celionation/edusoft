@@ -21,22 +21,25 @@ $this->title = "Course Registration";
         <div class="d-flex align-items-center">
             <h2 class="mx-auto">Course Registration</h2>
         </div>
-        <p class="text-danger text-center border-danger border-bottom border-3">Select the right course a this particular Semester! Error will be corrected by the Course Adviser<p>
+        <p class="text-danger text-center border-danger border-bottom border-3">Select the right course a this particular Semester! Error will be corrected by the Course Adviser
+        <p>
         <div class="container">
-            <div class="list-group">
-                <label class="list-group-item d-flex gap-3">
-                    <?= Form::checkInput('', 'course_id', '', ['class' => 'form-check-input flex-shrink-0', 'style' => 'font-size: 1.375em;'], [], $errors) ?>
-                    <span class="pt-1 form-checked-content">
-                        <h5 class="text-black">Insurance I</h5>
-                        <small class="d-block text-muted">
-                            <div>
-                                <strong class="me-5">Course Code: <span class="text-danger">BUS 123</span></strong>
-                                <strong class="ms-4">Credit: <span class="text-danger">3</span></strong>
-                            </div>
-                        </small>
-                    </span>
-                </label>
-            </div>
+            <form action="" method="post">
+                <?= Form::csrfField(); ?>
+                <div class="row g-3 my-1">
+                    <div class="col-md-12">
+                        <?= Form::selectField('Courses', 'course_id', '', $courseOptions, ['class' => 'form-control multiple'], ['class' => 'mb-3 col'], $errors); ?>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <button type="submit" class="btn btn-sm btn-primary w-100">Save</button>
+                    </div>
+                    <div class="col">
+                        <a href="/student/courses/registration" class="btn btn-sm btn-danger w-100">Cancel</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -22,6 +22,7 @@ class n00010_course_students
             updated_at DATETIME NULL ,
             `cs_id` VARCHAR(10) NULL,
             `course_id` VARCHAR(100) NOT NULL,
+            `matriculation_no` VARCHAR(20) NOT NULL,
             `user_id` VARCHAR(100) NOT NULL,
             `status` VARCHAR(20) NULL DEFAULT 'active',
             PRIMARY KEY (id)  

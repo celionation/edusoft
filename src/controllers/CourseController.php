@@ -89,7 +89,10 @@ class CourseController extends Controller
             'bind' => ['faculty' => $faculty],
             'order' => 'faculty'
         ]);
-        $deptOptions = ['' => '---'];
+        $deptOptions = [
+            '' => '---',
+            'general' => 'General'
+        ];
         foreach ($depts as $dept) {
             $deptOptions[$dept->department] = $dept->department;
         }
@@ -120,7 +123,7 @@ class CourseController extends Controller
             $course->faculty = strtolower($faculty);
 
             if ($course->save()) {
-                Session::msg("{$course->course}... Saved Successfully!.", 'success');
+                Session::msg("{$course->course_title}... Saved Successfully!.", 'success');
                 Response::redirect('admin/courses/lists');
             }
         }
