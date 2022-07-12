@@ -90,7 +90,7 @@ $this->title = "Lecturers Form";
                             <button type="submit" class="btn btn-success w-100">Submit</button>
                         </div>
                         <div class="col">
-                            <a href="/admin/admission" class="btn btn-danger w-100">Cancel</a>
+                            <a href="/admin/lecturers/lists" class="btn btn-danger w-100">Cancel</a>
                         </div>
                     </div>
 

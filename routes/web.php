@@ -9,6 +9,8 @@ use src\controllers\CourseController;
 use src\controllers\StudentController;
 use src\controllers\LecturerController;
 use src\controllers\AdmissionController;
+use src\controllers\AssessmentController;
+use src\controllers\StaffPortalController;
 use src\controllers\StudentPortalController;
 
 
@@ -30,12 +32,24 @@ use src\controllers\StudentPortalController;
 $app->router->get('/', [SiteController::class, 'index']);
 
 // Portals
+
+//---students
 $app->router->get('/students_portal', [StudentPortalController::class, 'students']);
 $app->router->get('/student/courses', [StudentPortalController::class, 'studentCourses']);
 $app->router->get('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
 $app->router->post('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
 $app->router->get('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
 $app->router->post('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
+
+//---payments -to be remove cause am not using it anymore.
+$app->router->get('/student/payments', [StudentPortalController::class, 'payments']);
+
+$app->router->get('/staffs_portal', [StaffPortalController::class, 'staffs']);
+
+//---lecturers
+$app->router->get('/staffs_portal/lecturers', [StaffPortalController::class, 'lecturers']);
+$app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class, 'continousAssessment']);
+$app->router->get('/lecturer/exam/questions', [AssessmentController::class, 'examAssessment']);
 
 
 $app->router->get('/login', [AuthController::class, 'login']);
@@ -68,7 +82,7 @@ $app->router->get('/admin/lecturers/lists', [LecturerController::class, 'lecture
 $app->router->get('/admin/lecturers/{id}', [LecturerController::class, 'createLecturer']);
 $app->router->post('/admin/lecturers/{id}', [LecturerController::class, 'createLecturer']);
 $app->router->get('/admin/lecturers/delete/{id}', [LecturerController::class, 'deleteLecturer']);
-$app->router->get('/admin/lecturers/verified/{id}', [LecturerController::class, 'verified']);
+$app->router->get('/admin/lecturers/profile/{id}', [LecturerController::class, 'lecturerProfile']);
 
 //Admin Docs
 $app->router->get('/admin/faculties', [DocsController::class, 'faculties']);
@@ -98,6 +112,7 @@ $app->router->get('/admin/institute_fees/lists', [FeeController::class, 'feeList
 $app->router->get('/admin/institute_fees/{id}', [FeeController::class, 'createFee']);
 $app->router->post('/admin/institute_fees/{id}', [FeeController::class, 'createFee']);
 $app->router->get('/admin/institute_fees/delete/{id}', [FeeController::class, 'deleteFee']);
+
 
 //Access Control Roles
 $app->router->get('/admin/roles', [AdminController::class, 'roles']);

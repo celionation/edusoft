@@ -19,32 +19,39 @@ $this->title = "Student Courses";
 <hr>
 
 <div class="container">
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Course Title</th>
-                <th>Course Code</th>
-                <th>Course Credit</th>
-                <th>Course Type</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>1</th>
-                <td>Human Resources Management</td>
-                <td>BUS 321</td>
-                <td>3</td>
-                <td>Compulsory</td>
-                <td>Registered</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Total Outstanding Credits: 9</th>
-                <th class="text-end">Total Allowed Credit Remaining: 3</th>
-            </tr>
-        </tfoot>
-    </table>
+    <?php if (!empty($courses)) : ?>
+        <table class="table table-striped table-hover table-responsive">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Course Title</th>
+                    <th>Course Code</th>
+                    <th>Course Credit</th>
+                    <th>Course Type</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($courses as $key => $course) : ?>
+                    <tr>
+                        <th><?= $key + 1 ?></th>
+                        <td class="text-start"><?= $course->course_title ?></td>
+                        <td><?= $course->course_code ?></td>
+                        <td><?= $course->course_credit ?></td>
+                        <td><?= $course->course_type ?></td>
+                        <td><?= $course->status ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="">Total Allowed Credit: <span class="text-danger">Confirm from your course Adviser.</span></th>
+                    <th class="text-end">Semester: <span class="text-uppercase text-danger"><?= $course->semester ?></span>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    <?php else : ?>
+        <h5 class="text-center text-muted">No data yet!.</h5>
+    <?php endif; ?>
 </div>

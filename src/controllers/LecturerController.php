@@ -118,7 +118,7 @@ class LecturerController extends Controller
 
         $view = [
             'errors' => $lecturer->getErrors(),
-            'admission' => $lecturer,
+            'lecturer' => $lecturer,
             'deptOpt' => $deptOptions,
             'facOpt' => $facultyOptions,
             'positions' => [
@@ -183,6 +183,37 @@ class LecturerController extends Controller
             $lecturer->delete();
         }
         Response::redirect('admin/lecturers');
+    }
+    public function lecturerProfile(Request $request): View
+    {
+        Permission::permRedirect(['admin', 'dean'], 'admin/dashboard');
+
+        $id = $request->getParam('id');
+
+        if (isset($_GET['lecturer_no'])) {
+            $lecturer_no = $request->sanitize($_GET['lecturer_no']);
+        }
+
+        $ExtUserParams = [
+            'conditions' => "code_id = :code_id",
+            'bind' => ['code_id' => $lecturer_no],
+            'order' => "surname, firstname, lastname",
+        ]; // check if student exst in users table to remove verify
+
+        $params = [
+            'conditions' => "lecturer_id = :lecturer_id",
+            'bind' => ['lecturer_id' => $id],
+            'order' => "surname, firstname, lastname",
+        ];
+
+        $extUser = Users::findFirst($ExtUserParams);
+
+        $view = [
+            'lecturer' => Lecturers::findFirst($params),
+            'extUser' => $extUser,
+        ];
+
+        return View::make('pages/admin/lecturers/profile', $view);
     }
 
 }

@@ -47,7 +47,7 @@ class AuthController extends Controller
                             case 'students_portal':
                                 Response::redirect('students_portal');
                                 break;
-                            case 'staff_portal':
+                            case 'staffs_portal':
                                 Response::redirect('staffs_portal');
                                 break;
                             default:

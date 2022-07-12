@@ -7,13 +7,6 @@ $this->title = "Course Registration";
 
 ?>
 
-<style>
-    .list-group {
-        width: auto;
-        max-width: 100%;
-        margin: 0 auto;
-    }
-</style>
 
 <?= partials("PortalCrumbs") ?>
 

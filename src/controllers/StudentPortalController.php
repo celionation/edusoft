@@ -43,8 +43,20 @@ class StudentPortalController extends Controller
     public function studentCourses(): View
     {
         Permission::permRedirect(['student'], '');
+
+        $params = [
+            'columns' => "courses.*, course_students.course_id, course_students.status",
+            'conditions' => "courses.course_id = course_students.course_id AND course_students.matriculation_no = :matriculation_no",
+            'joins' => [
+                ['course_students', 'courses.course_id = course_students.course_id'],
+            ],
+            'bind' => ['matriculation_no' => $this->currentUser->code_id],
+            'order' => "courses.course_title"
+        ];
         
-        $view = [];
+        $view = [
+            'courses' => Courses::find($params),
+        ];
 
         return View::make('pages/portals/students/courses/courses', $view);
     }
@@ -141,6 +153,11 @@ class StudentPortalController extends Controller
         ];
 
         return View::make('pages/portals/students/courses/registerCourses', $view);
+    }
+
+    public function payments(): View
+    {
+        return View::make('pages/portals/payments/payments');
     }
 
 }

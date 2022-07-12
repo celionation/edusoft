@@ -27,13 +27,11 @@ use core\Session;
     <style>
         .nav-item a:hover {
             border-bottom: 2px solid red;
-            padding-bottom: 2px;
-            transition: 0.3s all ease;
+            transition: 0.3s ease-in-out;
         }
 
         .active {
             border-bottom: 2px solid red;
-            padding-bottom: 2px;
         }
     </style>
 </head>

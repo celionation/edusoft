@@ -36,9 +36,7 @@ $this->title = "Lecturers Lists";
                                 <td class="text-capitalize"><?= $lecList->department ?></td>
                                 <td class="text-capitalize"><?= $lecList->position ?></td>
                                 <td class="text-end">
-                                    <?php if (!empty($lecList->lecturer_no)) : ?>
-                                        <a href="/admin/users/create/new?lecturer_no=<?= $lecList->lecturer_no ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Add Lecturer"><i class="fas fa-check-circle"></i></a>
-                                    <?php endif; ?>
+                                    <a href="/admin/lecturers/profile/<?= $lecList->lecturer_id ?>?lecturer_no=<?= $lecList->lecturer_no ?>" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Add Lecturer"><i class="fas fa-eye"></i></a>
                                     <a href="/admin/lecturers/<?= $lecList->lecturer_id ?>?faculty=<?= $lecList->faculty ?>" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
                                     <button class="btn btn-sm btn-danger" onclick="deleteLecList('<?= $lecList->lecturer_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
                                 </td>

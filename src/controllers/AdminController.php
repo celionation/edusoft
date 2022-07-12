@@ -121,18 +121,23 @@ class AdminController extends Controller
 
         // For Registering a new Lecturer
         if (isset($_GET['lecturer_no'])) {
-            $roles = Roles::find([
-                'conditions' => "role LIKE '%lecturer%' OR role LIKE 'prof%'",
-                'order' => 'role'
-            ]);
-            $roleOptions = ['' => '---'];
-            foreach ($roles as $role) {
-                $roleOptions[$role->role] = $role->role;
-            }
+            // $roles = Roles::find([
+            //     'conditions' => "role LIKE '%lecturer%' OR role LIKE 'prof%'",
+            //     'order' => 'role'
+            // ]);
+            // $roleOptions = ['' => '---'];
+            // foreach ($roles as $role) {
+            //     $roleOptions[$role->role] = $role->role;
+            // }
+
+            $roleOptions = [
+                '' => '---',
+                'staff' => 'Staff'
+            ];
 
             $lecturerNo = $request->sanitize($_GET['lecturer_no']);
             $admParams = [
-                'columns' => "surname, firstname, lastname, email, lecturer_no",
+                'columns' => "surname, firstname, lastname, email, lecturer_no, position",
                 'conditions' => "lecturer_no = :lecturer_no",
                 'bind' => ['lecturer_no' => $lecturerNo],
             ];
@@ -143,6 +148,7 @@ class AdminController extends Controller
             $user->firstname = $lecturer->firstname;
             $user->lastname = $lecturer->lastname;
             $user->email = $lecturer->email;
+            $user->status = $lecturer->position;
         }
 
         if ($request->isPost()) {
