@@ -20,7 +20,7 @@ use core\Config;
     <!-- Swiper.js styles -->
     <link rel="stylesheet" href="<?= asset('/assets/css/bootstrap.min.css') ?>">
     <title>EduSoft | <?= $this->title ?></title>
-    <script src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
 </head>
 
 <body style="background-color: #ccc;">

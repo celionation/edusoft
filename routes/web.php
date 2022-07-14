@@ -48,8 +48,18 @@ $app->router->get('/staffs_portal', [StaffPortalController::class, 'staffs']);
 
 //---lecturers
 $app->router->get('/staffs_portal/lecturers', [StaffPortalController::class, 'lecturers']);
+
+//Assessment - Continous Assessment
 $app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class, 'continousAssessment']);
-$app->router->get('/lecturer/exam/questions', [AssessmentController::class, 'examAssessment']);
+
+//Assessment - Examination
+$app->router->get('/lecturer/exam/questions/{id}', [AssessmentController::class, 'examAssessment']);
+$app->router->post('/lecturer/exam/questions/{id}', [AssessmentController::class, 'examAssessment']);
+$app->router->get('/lecturer/exam/questions/lists', [AssessmentController::class, 'examLists']);
+$app->router->get('/lecturer/exam/question/view/{id}', [AssessmentController::class, 'examView']);
+$app->router->get('/lecturer/exam/question/create/{id}', [AssessmentController::class, 'examCreate']);
+$app->router->post('/lecturer/exam/question/create/{id}', [AssessmentController::class, 'examCreate']);
+$app->router->get('/lecturer/exam/question/delete/{id}', [AssessmentController::class, 'examDelete']);
 
 
 $app->router->get('/login', [AuthController::class, 'login']);

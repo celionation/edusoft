@@ -21,14 +21,13 @@ use core\Session;
     <!-- Custom styles -->
     <link rel="stylesheet" href="<?= asset('/assets/css/auth.css') ?>?v=<?= Config::get("version") ?>">
     <title>CNBlog | <?= $this->title ?></title>
-    <script src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
 </head>
 
 <body>
     <?= Session::displaySessionAlerts() ?>
     {{content}}
 
-    <script type="application/javascript" src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
     <script type="application/javascript" src="/assets/js/auth.js?v=<?= Config::get("version") ?>"></script>
 </body>
 

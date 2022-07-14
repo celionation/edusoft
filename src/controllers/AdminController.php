@@ -8,16 +8,17 @@ use core\Request;
 use core\Session;
 use core\Response;
 use core\Controller;
-use src\models\Users;
+use core\Application;
 use src\models\Roles;
+use src\models\Users;
+use src\models\Levels;
+use src\models\Students;
+use src\models\Lecturers;
+use src\models\Admissions;
 use src\classes\Permission;
 use core\helpers\FileUpload;
 use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
-use src\models\Admissions;
-use src\models\Lecturers;
-use src\models\Levels;
-use src\models\Students;
 
 class AdminController extends Controller
 {
@@ -121,14 +122,8 @@ class AdminController extends Controller
 
         // For Registering a new Lecturer
         if (isset($_GET['lecturer_no'])) {
-            // $roles = Roles::find([
+
             //     'conditions' => "role LIKE '%lecturer%' OR role LIKE 'prof%'",
-            //     'order' => 'role'
-            // ]);
-            // $roleOptions = ['' => '---'];
-            // foreach ($roles as $role) {
-            //     $roleOptions[$role->role] = $role->role;
-            // }
 
             $roleOptions = [
                 '' => '---',
@@ -184,6 +179,10 @@ class AdminController extends Controller
                 if ($user->save()) {
                     if (!empty($upload->tmp)) {
                         if ($upload->upload()) {
+                            if (file_exists($user->img) && $id != 'new') {
+                                unlink(Application::$ROOT_DIR . '/' . $user->img);
+                                $user->img = '';
+                            }
                             $user->img = $upload->fc;
                             $user->save();
                         }

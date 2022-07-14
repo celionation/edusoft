@@ -147,9 +147,17 @@ class AdmissionController extends Controller
                 if ($admission->save()) {
                     if (!empty($resultUpload->tmp && $dobUpload->tmp)) {
                         if ($resultUpload->upload()) {
+                            if (file_exists($admission->result_file) && $id != 'new') {
+                                unlink(Application::$ROOT_DIR . '/' . $admission->result_file);
+                                $admission->result_file = '';
+                            }
                             $admission->result_file = $resultUpload->fc;
                         }
                         if ($dobUpload->upload()) {
+                            if (file_exists($admission->dob_file) && $id != 'new') {
+                                unlink(Application::$ROOT_DIR . '/' . $admission->dob_file);
+                                $admission->dob_file = '';
+                            }
                             $admission->dob_file = $dobUpload->fc;
                         }
                         $admission->save();

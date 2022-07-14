@@ -23,7 +23,7 @@ use core\Session;
     <!-- Custom styles -->
     <link rel="stylesheet" href="<?= asset('/assets/css/style.css') ?>">
     <title>EduSoft | <?= $this->title ?></title>
-    <script src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
     <style>
         .nav-item a:hover {
             border-bottom: 2px solid red;
@@ -45,7 +45,6 @@ use core\Session;
     </main>
     <?php component('Footer') ?>
 
-    <script type="application/javascript" src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
     <script type="application/javascript" src="<?= asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
     <script type="application/javascript" src="/assets/js/main.js?v=<?= Config::get("version") ?>"></script>
 </body>

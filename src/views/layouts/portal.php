@@ -21,7 +21,7 @@ use core\Session;
     <link rel="stylesheet" href="<?= asset('/assets/css/admin.css') ?>">
     <link rel="stylesheet" href="<?= asset('/assets/sweetalert2/sweetalert2.min.css') ?>">
     <title>EduSoft | <?= $this->title ?></title>
-    <script src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
     <style>
         .nav-item a:hover {
             color: #111 !important;
@@ -60,7 +60,6 @@ use core\Session;
         </div>
     </div>
 
-    <script src="<?= asset('/assets/js/jquery.min.js') ?>"></script>
     <script type="application/javascript" src="<?= asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
     <script type="application/javascript" src="<?= asset('/assets/sweetalert2/sweetalert2.all.min.js') ?>"></script>
     <script>
