@@ -99,7 +99,7 @@ $this->title = "Create Examination Question";
                                             ?>
                                                 <li class="list-group-item">
                                                     <?=$letters[$num]?> : <input type="text" class="form-control" value="<?=$value?>" name="<?=$key?>" placeholder="Type your answer here">
-                                                    <label style="cursor: pointer;"><input type="radio" <?= $letters[$num] == $_POST['correct_answer'] ? 'checked' : '';?> value="<?=$letters[$num]?>" name="correct_answer"> Correct answer</label>
+                                                    <label style="cursor: pointer;"><input type="radio" <?= $letters[$num] == $questions->correct_answer ? 'checked' : '';?> value="<?=$letters[$num]?>" name="correct_answer"> Correct answer</label>
                                                 </li>
                                             <?php 
                                             $num++;
