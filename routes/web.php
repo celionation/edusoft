@@ -42,6 +42,9 @@ $app->router->get('/student/courses/registration/{id}', [StudentPortalController
 $app->router->post('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
 //Student Examination
 $app->router->get('/student/exams', [StudentPortalController::class, 'exams']);
+$app->router->get('/student/exams/confirm_exam/{id}', [StudentPortalController::class, 'confirmExam']);
+//doing exam.
+$app->router->get('/student/exam/{id}', [StudentPortalController::class, 'startExam']);
 
 //---payments -to be remove cause am not using it anymore.
 $app->router->get('/student/payments', [StudentPortalController::class, 'payments']);
@@ -58,10 +61,12 @@ $app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class
 $app->router->get('/lecturer/exam/questions/{id}', [AssessmentController::class, 'examAssessment']);
 $app->router->post('/lecturer/exam/questions/{id}', [AssessmentController::class, 'examAssessment']);
 $app->router->get('/lecturer/exam/questions/lists', [AssessmentController::class, 'examLists']);
+$app->router->get('/lecturer/exam/questions/status/{id}', [AssessmentController::class, 'examStatus']);
 $app->router->get('/lecturer/exam/question/view/{id}', [AssessmentController::class, 'examView']);
 $app->router->get('/lecturer/exam/question/create/{id}', [AssessmentController::class, 'examCreate']);
 $app->router->post('/lecturer/exam/question/create/{id}', [AssessmentController::class, 'examCreate']);
-$app->router->get('/lecturer/exam/question/delete/{id}', [AssessmentController::class, 'examDelete']);
+$app->router->get('/lecturer/exam/questions/delete/{id}', [AssessmentController::class, 'examDelete']);
+$app->router->get('/lecturer/exam/question/delete/{id}', [AssessmentController::class, 'questionDelete']);
 
 
 $app->router->get('/login', [AuthController::class, 'login']);

@@ -264,6 +264,26 @@ class AssessmentController extends Controller
 
         $id = $request->getParam('id');
 
+        $params = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $id],
+        ];
+
+        $assessment = Assessments::findFirst($params);
+
+        if ($assessment) {
+            Session::msg("Examination Deleted Successfully.", 'danger');
+            $assessment->delete();
+        }
+        Response::redirect("lecturer/exam/questions/lists");
+    }
+
+    public function questionDelete(Request $request)
+    {
+        Permission::permRedirect(['staff', 'admin'], '');
+
+        $id = $request->getParam('id');
+
         $exam_id = $request->sanitize($_GET['exam_id']);
 
         $params = [
@@ -279,6 +299,31 @@ class AssessmentController extends Controller
             $question->delete();
         }
         Response::redirect("lecturer/exam/question/view/$exam_id");
+    }
+
+    public function examStatus(Request $request)
+    {
+        Permission::permRedirect(['staff', 'admin'], '');
+
+        $id = $request->getParam('id');
+
+        if (isset($_GET['exam_status'])) {
+            $exam_status = $request->sanitize($_GET['exam_status']);
+        }
+
+        $params = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $id],
+        ];
+
+        $assessment = Assessments::findFirst($params);
+
+        $assessment->status = $exam_status;
+
+        if ($assessment->inlineUpdate(['status' => $exam_status], ['assessment_id' => $id])) {
+            Session::msg('Examination Status Updated...', 'success');
+            Response::redirect("lecturer/exam/questions/lists");
+        }
     }
 
 }

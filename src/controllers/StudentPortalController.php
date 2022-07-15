@@ -15,6 +15,7 @@ use src\classes\Permission;
 use src\models\Assessments;
 use src\models\Courses;
 use src\models\CourseStudents;
+use src\models\Students;
 
 class StudentPortalController extends Controller
 {
@@ -162,6 +163,8 @@ class StudentPortalController extends Controller
 
     public function exams(Request $request): View
     {
+        Permission::permRedirect(['student'], '');
+
         $params = [
             'columns' => "assessments.*, course_students.course_code, course_students.status as courseStatus",
             'conditions' => "course_students.matriculation_no = :code_id AND course_students.user_id = :user_id AND assessments.status = 'active' AND course_students.status = 'waiting'",
@@ -172,13 +175,56 @@ class StudentPortalController extends Controller
             'order' => "assessments.created_at"
         ];
 
+        $examPermParams = [
+            'conditions' => "exam_permission = 'accepted' AND matriculation_no = :matriculation_no",
+            'bind' => ['matriculation_no' => $this->currentUser->code_id],
+        ];
+
         $assessments = Assessments::find($params);
 
         $view = [
             'assessments' => $assessments,
+            'student' => Students::findFirst($examPermParams),
         ];
 
         return View::make('pages/portals/students/exams/exams', $view);
+    }
+
+    public function confirmExam(Request $request): View
+    {
+        Permission::permRedirect(['student'], '');
+
+        $id = $request->getParam('id');
+
+        if(isset($_GET['matriculation_no'])) {
+            $matriculation_no = $request->sanitize($_GET['matriculation_no']);
+        }
+
+        if(isset($_GET['user_id'])) {
+            $user_id = $request->sanitize($_GET['user_id']);
+        }
+
+        $params = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $id],
+        ];
+
+        $view = [
+            'assessment' => Assessments::findFirst($params),
+            'matriculation_no' => $matriculation_no,
+            'user_id' => $user_id,
+        ];
+
+        return View::make('pages/portals/students/exams/startModal', $view);
+    }
+
+    public function startExam(Request $request): View
+    {
+        $this->setLayout('exam');
+
+        $view = [];
+
+        return View::make('pages/portals/students/exams/exam', $view);
     }
 
     public function payments(): View

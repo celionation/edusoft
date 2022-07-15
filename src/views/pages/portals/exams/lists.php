@@ -37,7 +37,12 @@ $this->title = "Examination Questions Selection";
                                 <td><?= $assessment->course_code ?></td>
                                 <td>
                                     <a href="/lecturer/exam/questions/<?= $assessment->assessment_id ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                    <a href="/lecturer/exam/questions/delete/<?= $assessment->assessment_id ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    <?php if ($assessment->status == 'disabled') : ?>
+                                        <a href="/lecturer/exam/questions/status/<?= $assessment->assessment_id ?>?exam_status=active" class="btn btn-sm btn-success"><i class="fas fa-check"></i></a>
+                                    <?php else : ?>
+                                        <a href="/lecturer/exam/questions/status/<?= $assessment->assessment_id ?>?exam_status=disabled" class="btn btn-sm btn-secondary"><i class="fas fa-times"></i></a>
+                                    <?php endif; ?>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Delete Exam" onclick="deleteExam('<?= $assessment->assessment_id ?>')"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -47,3 +52,11 @@ $this->title = "Examination Questions Selection";
         </div>
     </div>
 </div>
+
+<script>
+    function deleteExam(id) {
+        if (window.confirm("Are you sure you want to delete this Examination? This cannot be undone!")) {
+            window.location.href = `/lecturer/exam/questions/delete/${id}`;
+        }
+    }
+</script>

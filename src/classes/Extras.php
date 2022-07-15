@@ -3,6 +3,8 @@
 namespace src\classes;
 
 use src\models\Courses;
+use src\models\Lecturers;
+use src\models\Users;
 
 class Extras
 {
@@ -15,6 +17,23 @@ class Extras
             }
         }
         return $image;
+    }
+
+    public static function getLeturer($id)
+    {
+        $params = [
+            'columns' => "surname, firstname, status",
+            'conditions' => "user_id = :user_id",
+            'bind' => ['user_id' => $id],
+        ];
+
+        $lecturer = Users::findFirst($params);
+        
+        if($lecturer == NULL) {
+            return '---';
+        }
+
+        return str_replace('I', '', $lecturer->status) . '. ' . $lecturer->surname . ' ' . $lecturer->firstname;
     }
 
     public static function getAssLeturer($no)

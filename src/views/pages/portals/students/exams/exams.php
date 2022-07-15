@@ -1,6 +1,11 @@
 <?php
 
+
+/** @var mixed $currentUser */
+global $currentUser;
+
 $this->title = "Student Examination Lists.";
+
 
 ?>
 
@@ -30,13 +35,15 @@ $this->title = "Student Examination Lists.";
                         <td><?= $assessment->assessment_title ?></td>
                         <td><?= $assessment->course_code ?></td>
                         <td><?= $assessment->assessment_time ?></td>
-                        <?php if($assessment->courseStatus == 'waiting'): ?>
+                        <?php if ($assessment->courseStatus == 'waiting') : ?>
                             <td class="text-warning fw-bold"><?= $assessment->courseStatus ?></td>
-                            <?php else: ?>
-                                <td class="text-success fw-bold"><?= $assessment->courseStatus ?></td>
+                        <?php else : ?>
+                            <td class="text-success fw-bold"><?= $assessment->courseStatus ?></td>
                         <?php endif; ?>
                         <td class="text-end">
-                            <a href="#" class="btn btn-sm btn-primary">Take Exam</a>
+                            <?php if (isset($student->exam_permission) && $student->exam_permission == 'accepted') : ?>
+                                <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Take Exam" onclick="takeExam('<?= $assessment->assessment_id ?>', '<?= $student->matriculation_no ?>', '<?= $currentUser->user_id ?>')">Take Exam</button>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -51,3 +58,11 @@ $this->title = "Student Examination Lists.";
         <h6 class="text-center text-muted small border-bottom border-3 border-danger py-1">No Data yet!.</h6>
     <?php endif; ?>
 </div>
+
+<script>
+    function takeExam(id, matricNo, userId) {
+        if (window.confirm("Are you sure you want to Start this Examination?")) {
+            window.location.href = `/student/exams/confirm_exam/${id}?matriculation_no=${matricNo}&user_id=${userId}`;
+        }
+    }
+</script>
