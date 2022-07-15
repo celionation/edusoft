@@ -196,9 +196,10 @@ class AssessmentController extends Controller
 
         if($request->isPost()) {
             Session::csrfCheck();
-            $assessmentQuestion->question = $request->get('question');
-            $assessmentQuestion->comment = $request->get('comment');
-            $assessmentQuestion->correct_answer = $request->get('correct_answer');
+            $fields = ['question', 'comment', 'correct_answer', 'option_one', 'option_two', 'option_three', 'option_four'];
+            foreach ($fields as $field) {
+                $assessmentQuestion->{$field} = $request->get($field);
+            }
             $assessmentQuestion->assessment_id = $exam_id;
             $assessmentQuestion->question_type = $type;
             $assessmentQuestion->user_id = $this->currentUser->user_id;
@@ -208,21 +209,9 @@ class AssessmentController extends Controller
                 $upload->required = false;
             }
 
-            if (isset($_GET['type']) && $_GET['type'] == "multiple") {
+            if (isset($type) && $type == "multiple") {
                 //for multiple choice
-                $num = 0;
-                $arr = [];
-                $letters = ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J'];
-                foreach ($_POST as $key => $value) {
-                    // code...
-                    if (strstr($key, 'choice')) {
-
-                        $arr[$letters[$num]] = $value;
-                        $num++;
-                    }
-                }
-
-                $assessmentQuestion->choices = json_encode($arr);
+                
             }
 
             $uploadErrors = $upload->validate();
@@ -257,6 +246,13 @@ class AssessmentController extends Controller
             'errors' => $assessmentQuestion->getErrors(),
             'assessment' => Assessments::findFirst($params),
             'questions' => $assessmentQuestion,
+            'Options' => [
+                '' => '---',
+                'option_one' => 'Option One',
+                'option_two' => 'Option Two',
+                'option_three' => 'Option Three',
+                'option_four' => 'Option Four'
+            ],
         ];
 
         return View::make('pages/portals/exams/create', $view);

@@ -82,43 +82,30 @@ $this->title = "Create Examination Question";
 
                         <?php if (isset($_GET['type']) && $_GET['type'] == 'multiple') : ?>
                             <div class="card">
-                            <div class="card-header bg-secondary text-white">
-                                Multiple Choice Answers <button onclick="add_choice()" type="button" class="btn btn-warning btn-sm float-end"><i class="fa fa-plus"></i>Add Choice</button>
-                            </div>
-                            <ul class="list-group list-group-flush choice-list">
-                                
-                                <?php if(isset($_POST['choice0'])):?>
-                                    
-                                    <?php 
-                                    //check for multiple choice answers
-                                    $num = 0;
-                                    $letters = ['A','B','C','D','F','G','H','I','J'];
-                                    foreach ($_POST as $key => $value) {
-                                        // code...
-                                        if(strstr($key, 'choice')){
-                                            ?>
-                                                <li class="list-group-item">
-                                                    <?=$letters[$num]?> : <input type="text" class="form-control" value="<?=$value?>" name="<?=$key?>" placeholder="Type your answer here">
-                                                    <label style="cursor: pointer;"><input type="radio" <?= $letters[$num] == $questions->correct_answer ? 'checked' : '';?> value="<?=$letters[$num]?>" name="correct_answer"> Correct answer</label>
-                                                </li>
-                                            <?php 
-                                            $num++;
-                                        }
-                                    }
-                                    ?>
-                                <?php else:?>
-                                    <li class="list-group-item">
-                                        A : <input type="text" class="form-control" name="choice0" placeholder="Type your answer here">
-                                        <label style="cursor: pointer;"><input type="radio" value="A" name="correct_answer"> Correct answer</label>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        B : <input type="text" class="form-control" name="choice1" placeholder="Type your answer here">
-                                        <label style="cursor: pointer;"><input type="radio" value="B" name="correct_answer"> Correct answer</label>
-                                    </li>
-                                <?php endif;?>
-                    
-                            </ul>
+                                <div class="card-header bg-black text-white">
+                                    Multiple Choice Answers
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3 my-1">
+                                        <div class="col-md-12">
+                                            <?= Form::inputField('Option One', 'option_one', $questions->option_one ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'Option One'], ['class' => 'mb-3 col'], $errors); ?>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <?= Form::inputField('Option Two', 'option_two', $questions->option_two ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'Option Two'], ['class' => 'mb-3 col'], $errors); ?>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <?= Form::inputField('Option Three', 'option_three', $questions->option_three ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'Option Three'], ['class' => 'mb-3 col'], $errors); ?>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <?= Form::inputField('Option Four', 'option_four', $questions->option_four ?? '', ['class' => 'form-control', 'type' => 'text', 'placeholder' => 'Option Four'], ['class' => 'mb-3 col'], $errors); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-black text-white">
+                                    <div class="col-md-12">
+                                        <?= Form::selectField('Select Correct Option', 'correct_answer', $questions->correct_answer ?? '', $Options, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                                    </div>
+                                </div>
                             </div>
                         <?php endif; ?>
 

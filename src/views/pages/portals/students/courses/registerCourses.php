@@ -21,8 +21,11 @@ $this->title = "Course Registration";
             <form action="" method="post">
                 <?= Form::csrfField(); ?>
                 <div class="row g-3 my-1">
-                    <div class="col-md-12">
-                        <?= Form::selectField('Courses', 'course_id', '', $courseOptions, ['class' => 'form-control select'], ['class' => 'mb-3 col'], $errors); ?>
+                    <div class="col-md-6">
+                        <?= Form::selectField('Course', 'course_id', '', $courseOptions, ['class' => 'form-control select'], ['class' => 'mb-3 col'], $errors); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= Form::selectField('Course Code', 'course_code', '', $codeOptions, ['class' => 'form-control select'], ['class' => 'mb-3 col'], $errors); ?>
                     </div>
                 </div>
                 <div class="row mt-2">

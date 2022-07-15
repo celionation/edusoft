@@ -12,6 +12,6 @@ $this->title = "Student Portal";
     </div>
     <div class="text-end">
         <a class="btn btn-sm btn-warning" href="/student/cont_asses">Cont.Asses <span class="badge bg-danger rounded-circle">1</span></a>
-        <a class="btn btn-sm btn-primary" href="/student/exam">Exam <span class="badge bg-danger rounded-circle">2</span></a>
+        <a class="btn btn-sm btn-primary" href="/student/exams">Exam <span class="badge bg-danger rounded-circle">2</span></a>
     </div>
 </div>

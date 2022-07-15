@@ -77,4 +77,33 @@ class StudentController extends Controller
         return View::make('pages/admin/students/profile', $view);
     }
 
+    public function studentExamPerm(Request $request)
+    {
+        Permission::permRedirect(['admin', 'dean'], 'admin/dashboard');
+
+        $id = $request->getParam('id');
+
+        if (isset($_GET['matriculation_no'])) {
+            $matriculation_no = $request->sanitize($_GET['matriculation_no']);
+        }
+        if (isset($_GET['exam_perm'])) {
+            $exam_perm = $request->sanitize($_GET['exam_perm']);
+        }
+
+        $params = [
+            'conditions' => "student_id = :student_id AND matriculation_no = :matriculation_no",
+            'bind' => ['student_id' => $id, 'matriculation_no' => $matriculation_no],
+            'order' => "surname, firstname, lastname",
+        ];
+
+        $student = Students::findFirst($params);
+
+        $student->exam_permission = $exam_perm;
+
+        if($student->inlineUpdate(['exam_permission' => $exam_perm], ['student_id' => $id])) {
+            Session::msg('Examination Permission Saved', 'success');
+            Response::redirect("admin/students");
+        }
+    }
+
 }

@@ -15,6 +15,6 @@ class CourseStudents extends Model
         $this->timeStamps();
 
         $this->runValidation(new RequiredValidator($this, ['field' => 'course_id', 'msg' => 'Course is required']));
-        $this->runValidation(new UniqueValidator($this, ['field' => 'course_id', 'msg' => 'Course Already Exists']));
+        $this->runValidation(new UniqueValidator($this, ['field' => ['course_id', 'user_id', 'matriculation_no'], 'msg' => 'Course Already Exists']));
     }
 }

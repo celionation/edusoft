@@ -34,7 +34,7 @@ $this->title = "Admin Users";
                                 <th scope="col">Matric No</th>
                                 <th scope="col">Level</th>
                                 <th scope="col">Standing</th>
-                                <th scope="col">Assess.Perm</th>
+                                <th scope="col">Exam.Perm</th>
                                 <th scope="col" class="text-end">Actions</th>
                             </tr>
                         </thead>
@@ -46,9 +46,14 @@ $this->title = "Admin Users";
                                     <td><?= $student->matriculation_no ?></td>
                                     <td><?= $student->level ?></td>
                                     <td><?= $student->standing ?></td>
-                                    <td><?= $student->ass_permission ?></td>
+                                    <td><?= $student->exam_permission ?></td>
                                     <td class="text-end">
                                         <a href="/admin/students/profile/<?= $student->student_id ?>?matriculation_no=<?= $student->matriculation_no ?>" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Preview"><i class="fas fa-eye"></i></a>
+                                        <?php if ($student->exam_permission == 'accepted') : ?>
+                                            <a href="/admin/students/exam_perm/<?= $student->student_id ?>?matriculation_no=<?= $student->matriculation_no ?>&exam_perm=declined" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Examination Perm Declined"><i class="fas fa-file-excel"></i></a>
+                                        <?php else : ?>
+                                            <a href="/admin/students/exam_perm/<?= $student->student_id ?>?matriculation_no=<?= $student->matriculation_no ?>&exam_perm=accepted" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Examination Perm Accepted"><i class="fas fa-file-signature"></i></a>
+                                        <?php endif; ?>
                                         <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Report Issue"><i class="fas fa-question-circle"></i></a>
                                     </td>
                                 </tr>

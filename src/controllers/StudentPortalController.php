@@ -12,6 +12,7 @@ use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
 use src\models\Users;
 use src\classes\Permission;
+use src\models\Assessments;
 use src\models\Courses;
 use src\models\CourseStudents;
 
@@ -125,8 +126,10 @@ class StudentPortalController extends Controller
 
         $courses = Courses::find($params);
         $courseOptions = ['' => '---'];
+        $codeOptions = ['' => '---'];
         foreach ($courses as $course) {
             $courseOptions[$course->course_id] = $course->course_code . ' ' . $course->course_title;
+            $codeOptions[$course->course_code] = $course->course_code;
         }
 
         $courseStudent = new CourseStudents;
@@ -134,6 +137,7 @@ class StudentPortalController extends Controller
         if($request->isPost()) {
             Session::csrfCheck();
             $courseStudent->course_id = $request->get('course_id');
+            $courseStudent->course_code = $request->get('course_code');
             $courseStudent->cs_id = GenerateToken::randomString(10);
             $courseStudent->user_id = $this->currentUser->user_id;
             $courseStudent->matriculation_no = $this->currentUser->code_id;
@@ -149,10 +153,32 @@ class StudentPortalController extends Controller
         $view = [
             'errors' => $courseStudent->getErrors(),
             'courseOptions' => $courseOptions,
+            'codeOptions' => $codeOptions,
             'courseStdLists' => CourseStudents::find($courseStudentParams),
         ];
 
         return View::make('pages/portals/students/courses/registerCourses', $view);
+    }
+
+    public function exams(Request $request): View
+    {
+        $params = [
+            'columns' => "assessments.*, course_students.course_code, course_students.status as courseStatus",
+            'conditions' => "course_students.matriculation_no = :code_id AND course_students.user_id = :user_id AND assessments.status = 'active' AND course_students.status = 'waiting'",
+            'joins' => [
+                ['course_students', 'assessments.course_code = course_students.course_code'],
+            ],
+            'bind' => ['code_id' => $this->currentUser->code_id, 'user_id' => $this->currentUser->user_id],
+            'order' => "assessments.created_at"
+        ];
+
+        $assessments = Assessments::find($params);
+
+        $view = [
+            'assessments' => $assessments,
+        ];
+
+        return View::make('pages/portals/students/exams/exams', $view);
     }
 
     public function payments(): View

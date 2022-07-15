@@ -77,10 +77,10 @@ $this->title = "Admin Users";
                                 <?php endif; ?>
 
                                 <th>Exam Permission</th>
-                                <?php if ($student->ass_permission == 'accepted') : ?>
-                                    <td class="text-success fw-bold text-capitalize"><?= $student->ass_permission ?></td>
+                                <?php if ($student->exam_permission == 'accepted') : ?>
+                                    <td class="text-success fw-bold text-capitalize"><?= $student->exam_permission ?></td>
                                 <?php else : ?>
-                                    <td class="text-danger fw-bold text-capitalize"><?= $student->ass_permission ?></td>
+                                    <td class="text-danger fw-bold text-capitalize"><?= $student->exam_permission ?></td>
                                 <?php endif; ?>
                             </tr>
                         </table>

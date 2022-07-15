@@ -35,6 +35,12 @@ class Model
         return $db->update(static::$table, $values, $conditions);
     }
 
+    public static function inlineUpdate($values, $conditions)
+    {
+        $db = static::getDb();
+        return $db->update(static::$table, $values, $conditions);
+    }
+
     /**
      * @throws Exception
      */

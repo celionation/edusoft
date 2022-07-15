@@ -40,6 +40,8 @@ $app->router->get('/student/courses/registration', [StudentPortalController::cla
 $app->router->post('/student/courses/registration', [StudentPortalController::class, 'selectCourseSemester']);
 $app->router->get('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
 $app->router->post('/student/courses/registration/{id}', [StudentPortalController::class, 'registerCourses']);
+//Student Examination
+$app->router->get('/student/exams', [StudentPortalController::class, 'exams']);
 
 //---payments -to be remove cause am not using it anymore.
 $app->router->get('/student/payments', [StudentPortalController::class, 'payments']);
@@ -84,6 +86,7 @@ $app->router->get('/admin/admission/verify/{id}', [AdmissionController::class, '
 // Students
 $app->router->get('/admin/students', [StudentController::class, 'students']);
 $app->router->get('/admin/students/profile/{id}', [StudentController::class, 'studentProfile']);
+$app->router->get('/admin/students/exam_perm/{id}', [StudentController::class, 'studentExamPerm']);
 
 //Lecturer
 $app->router->get('/admin/lecturers', [LecturerController::class, 'lecturers']);
