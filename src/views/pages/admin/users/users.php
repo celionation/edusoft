@@ -4,6 +4,8 @@ use core\forms\Form;
 use core\helpers\CoreHelpers;
 use src\classes\Extras;
 
+global $currentLink;
+
 $this->title = "Admin Users";
 
 ?>
@@ -27,34 +29,51 @@ $this->title = "Admin Users";
 
                 <hr class="mt-1">
 
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">E-Mail</th>
-                            <th scope="col">Access Level</th>
-                            <th scope="col">Status</th>
-                            <th scope="col" class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($users as $key => $user) : ?>
+                <?php if ($users) : ?>
+                    <table class="table table-striped table-hover">
+                        <thead>
                             <tr>
-                                <th scope="row"><?= $key + 1 ?></th>
-                                <td class="text-capitalize"><?= $user->surname . ' ' . $user->firstname . ' ' . $user->lastname ?></td>
-                                <td><?= $user->email ?></td>
-                                <td class="text-capitalize"><?= $user->acl ?></td>
-                                <td class="text-capitalize"><?= $user->status ?></td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Preview"><i class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#previewUser"></i></button>
-                                    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteUser('<?= $user->user_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Access Level</th>
+                                <th scope="col">Status</th>
+                                <th scope="col" class="text-end">Actions</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users as $key => $user) : ?>
+                                <tr>
+                                    <th scope="row"><?= $key + 1 ?></th>
+                                    <td class="text-capitalize"><?= $user->surname . ' ' . $user->firstname . ' ' . $user->lastname ?></td>
+                                    <td><?= $user->email ?></td>
+                                    <td class="text-capitalize"><?= $user->acl ?></td>
+                                    <td class="text-capitalize"><?= $user->status ?></td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Preview"><i class="fas fa-eye" data-bs-toggle="modal" data-bs-target="#previewUser"></i></button>
+                                        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteUser('<?= $user->user_id ?>')" data-bs-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <!-- Pagination -->
+                    <nav aria-label="Pagination">
+                        <ul class="d-flex justify-content-evenly align-items-center my-1 pagination">
+                            <li class="page-item <?= !$prevPage ? 'disabled' : '' ?>" aria-current="page">
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?page=<?= $prevPage ?>">Prev</a>
+                            </li>
+                            <li class="page-item <?= !$nextPage ? 'disabled' : '' ?>" aria-current="page">
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?page=<?= $nextPage ?>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- //Pagination -->
+                <?php else : ?>
+                    <h6 class="text-center text-muted">No Data yet!.</h6>
+                    <a href="<?= ROOT . $currentLink ?>?page=1" class="btn btn-sm btn-primary text-center w-100"><i class="fas fa-chevron-left"></i> Back</a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

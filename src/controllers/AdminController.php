@@ -33,11 +33,13 @@ class AdminController extends Controller
 
         $this->currentUser = Users::getCurrentUser();
 
-        Permission::permRedirect(['admin', 'principal', 'vc'], '');
+        Permission::permRedirect(['admin'], '');
     }
 
     public function dashboard(): View
     {
+        Permission::permRedirect(['admin', 'principal', 'vc'], '');
+
         $view = [];
 
         return View::make('pages/admin/dashboard', $view);
@@ -45,6 +47,8 @@ class AdminController extends Controller
 
     public function account(): View
     {
+        Permission::permRedirect(['admin', 'principal', 'vc'], '');
+
         $view = [
 
         ];
@@ -54,16 +58,26 @@ class AdminController extends Controller
 
     public function users(Request $request): View
     {
+        Permission::permRedirect(['admin', 'vc'], '');
+
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
             'conditions' => "acl != 'guests' OR 'student'",
-            'order' => 'surname', 'firstname'
+            'order' => 'surname', 'firstname',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
 
-        $params = Users::mergeWithPagination($params);
+        $total = Users::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'users' => Users::find($params),
-            'total' => Users::findTotal($params),
+            'total' => $total,
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/users/users', $view);
@@ -71,6 +85,8 @@ class AdminController extends Controller
 
     public function createuser(Request $request)
     {
+        Permission::permRedirect(['admin', 'vc'], '');
+
         $id = $request->getParam('id');
 
         $params = [
@@ -209,15 +225,25 @@ class AdminController extends Controller
 
     public function roles(Request $request): View
     {
+        Permission::permRedirect(['admin', 'vc'], '');
+
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
-            'order' => 'created_at'
+            'order' => 'created_at',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
 
-        $params = Roles::mergeWithPagination($params);
+        $total = Roles::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'roles' => Roles::find($params),
-            'total' => Roles::findTotal($params),
+            'total' => $total,
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/roles/roles', $view);
@@ -225,6 +251,8 @@ class AdminController extends Controller
 
     public function createrole(Request $request): View
     {
+        Permission::permRedirect(['admin', 'vc'], '');
+
         $id = $request->getParam('id');
 
         $params = [
@@ -267,6 +295,8 @@ class AdminController extends Controller
 
     public function levels(Request $request): View
     {
+        Permission::permRedirect(['admin', 'vc'], '');
+
         $id = $request->getParam('id');
 
         if ($id == 'new') {

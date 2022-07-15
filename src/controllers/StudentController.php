@@ -9,6 +9,8 @@ use core\Session;
 use core\Response;
 use core\Controller;
 use core\helpers\CoreHelpers;
+use core\helpers\Pagination;
+use src\classes\Extras;
 use src\models\Users;
 use src\classes\Permission;
 use src\models\Students;
@@ -31,15 +33,23 @@ class StudentController extends Controller
 
     public function students(Request $request): View
     {
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 10;
+
         $params = [
-            'order' => 'surname', 'firstname'
+            'order' => 'surname', 'firstname',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
 
-        $params = Students::mergeWithPagination($params);
+        $total = Students::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'students' => Students::find($params),
-            'total' => Students::findTotal($params),
+            'total' => $total,
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/students/students', $view);
@@ -51,7 +61,7 @@ class StudentController extends Controller
 
         $id = $request->getParam('id');
 
-        if(isset($_GET['matriculation_no'])) {
+        if (isset($_GET['matriculation_no'])) {
             $matriculation_no = $request->sanitize($_GET['matriculation_no']);
         }
 
@@ -68,7 +78,7 @@ class StudentController extends Controller
         ];
 
         $extUser = Users::findFirst($ExtUserParams);
-        
+
         $view = [
             'student' => Students::findFirst($params),
             'extUser' => $extUser,
@@ -100,10 +110,9 @@ class StudentController extends Controller
 
         $student->exam_permission = $exam_perm;
 
-        if($student->inlineUpdate(['exam_permission' => $exam_perm], ['student_id' => $id])) {
+        if ($student->inlineUpdate(['exam_permission' => $exam_perm], ['student_id' => $id])) {
             Session::msg('Examination Permission Saved', 'success');
             Response::redirect("admin/students");
         }
     }
-
 }

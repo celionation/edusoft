@@ -129,12 +129,22 @@ class FeeController extends Controller
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
-            'order' => 'faculty, department'
+            'order' => 'faculty, department',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = InstituteFees::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'feeLists' => InstituteFees::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/fees/lists', $view);

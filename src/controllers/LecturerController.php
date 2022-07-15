@@ -153,13 +153,23 @@ class LecturerController extends Controller
     public function lecturerLists(Request $request): View
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
+
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
-            // 'conditions' => "status = 'active'",
-            'order' => 'surname', 'firstname'
+            'order' => 'surname', 'firstname',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = Lecturers::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'lecturerLists' => Lecturers::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/lecturers/lists', $view);

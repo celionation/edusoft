@@ -142,6 +142,9 @@ class CourseController extends Controller
     public function courseLists(Request $request): View
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
+
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
         
         $params = [
             'columns' => "courses.*, lecturers.surname, lecturers.firstname, lecturers.position",
@@ -149,11 +152,18 @@ class CourseController extends Controller
             'joins' => [
                 ['lecturers', 'courses.lecturer = lecturers.lecturer_no'],
             ],
-            'order' => 'courses.course_code'
+            'order' => 'courses.course_code',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = Courses::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'courseLists' => Courses::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/courses/lists', $view);

@@ -1,5 +1,7 @@
 <?php
 
+global $currentLink;
+
 $this->title = "Admission Lists";
 
 ?>
@@ -57,8 +59,21 @@ $this->title = "Admission Lists";
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <!-- Pagination -->
+                    <nav aria-label="Pagination">
+                        <ul class="d-flex justify-content-evenly align-items-center my-1 pagination">
+                            <li class="page-item <?= !$prevPage ? 'disabled' : '' ?>" aria-current="page">
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?page=<?= $prevPage ?>">Prev</a>
+                            </li>
+                            <li class="page-item <?= !$nextPage ? 'disabled' : '' ?>" aria-current="page">
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?page=<?= $nextPage ?>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- //Pagination -->
                 <?php else : ?>
                     <h5 class="text-center text-muted">No Students data yet!.</h5>
+                    <a href="<?= ROOT . $currentLink ?>?page=1" class="btn btn-sm btn-primary text-center w-100"><i class="fas fa-chevron-left"></i> Back</a>
                 <?php endif; ?>
             </div>
         </div>

@@ -221,13 +221,23 @@ class AdmissionController extends Controller
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
             'conditions' => "status = 'progress'",
-            'order' => 'surname', 'firstname'
+            'order' => 'surname', 'firstname',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = Admissions::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'admissionLists' => Admissions::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/admission/lists', $view);
@@ -244,13 +254,23 @@ class AdmissionController extends Controller
     {
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 1;
+
         $params = [
             'conditions' => "status = 'admitted'",
-            'order' => 'surname', 'firstname'
+            'order' => 'surname', 'firstname',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = Admissions::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'admissionLists' => Admissions::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/admin/admission/lists', $view);
