@@ -26,7 +26,6 @@ use core\Session;
             background: url('/assets/img/logo.png') no-repeat center center;
             height: 100vh;
         }
-
         .nav-item a:hover {
             color: #111 !important;
             background-color: #F1F1F1 !important;

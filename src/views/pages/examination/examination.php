@@ -3,12 +3,15 @@
 use core\forms\Form;
 use core\helpers\CoreHelpers;
 use core\helpers\StringFormat;
+use src\classes\Extras;
+
+/** @var mixed $currentUser */
 
 global $currentLink;
 global $quryStr;
+global $currentUser;
 
-$this->title = "Examination";
-
+$this->title = "Examination Page";
 
 ?>
 
@@ -34,6 +37,13 @@ $this->title = "Examination";
                     <td colspan="4" class="text-end fw-bold text-uppercase"><?= $assessment->assessment_instruction ?></td>
                 </tr>
             </table>
+            <div class="container-fluid text-center bg-primary shadow py-2 rounded-3">
+                <?php $percentage = Extras::getAnswerPercentage($assessment->assessment_id, $currentUser->code_id) ?>
+                <div class="text-white"><?= $percentage ?>% Answered</div>
+                <div class="progress">
+                    <div class="progress-bar bg-danger" style="width: <?= $percentage ?>%;" role="progressbar" aria-valuenow="<?= $percentage ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Exam Questions -->
@@ -47,6 +57,7 @@ $this->title = "Examination";
                                 <h4 class="card-title text-white fw-bold"><?= $question->question ?></h4>
                             </div>
                             <div class="card-body">
+                                <?php $myAnswer = Extras::savedAnswer($savedAnswer, $question->question_id) ?>
                                 <?php if (!empty($question->image) && file_exists($question->image)) : ?>
                                     <img src="<?= ROOT . $question->image ?>" alt="<?= StringFormat::Excerpt($question->question) ?>" class="img-thumbnail" style="height:200px;width:400px;object-fit:cover;">
                                 <?php endif; ?>
@@ -58,26 +69,26 @@ $this->title = "Examination";
                                 <?php endif; ?>
 
                                 <?php if ($question->question_type != 'multiple') : ?>
-                                    <?= Form::textareaField('', 'answer', '', ['class' => 'form-control fs-4 text-black', 'rows' => '3'], ['class' => 'answer'], $errors) ?>
+                                    <?= Form::textareaField('', 'answer', $myAnswer ?? '', ['class' => 'form-control fs-4 text-black', 'rows' => '3'], ['class' => 'answer'], $errors) ?>
                                 <?php endif; ?>
 
                                 <?php if ($question->question_type == 'multiple') : ?>
                                     <div class="anwser">
                                         <div class="list-group mx-0">
                                             <label class="list-group-item d-flex gap-2 my-1">
-                                                <input class="form-check-input flex-shrink-0" type="radio" name="option" value="<?= $question->option_one ?>" style="transform: scale(1.5);cursor: pointer;">
+                                                <input class="form-check-input flex-shrink-0" type="radio" name="answer" value="<?= $question->option_one ?>" style="transform: scale(1.5);cursor: pointer;" <?= $myAnswer == $question->option_one ? ' checked ' : '' ?>>
                                                 <h6 class="d-block text-black ps-3"><?= $question->option_one ?></h6>
                                             </label>
                                             <label class="list-group-item d-flex gap-2 my-1">
-                                                <input class="form-check-input flex-shrink-0" type="radio" name="option" value="<?= $question->option_two ?>" style="transform: scale(1.5);cursor: pointer;">
+                                                <input class="form-check-input flex-shrink-0" type="radio" name="answer" value="<?= $question->option_two ?>" style="transform: scale(1.5);cursor: pointer;" <?= $myAnswer == $question->option_two ? ' checked ' : '' ?>>
                                                 <h6 class="d-block text-black ps-3"><?= $question->option_two ?></h6>
                                             </label>
                                             <label class="list-group-item d-flex gap-2 my-1">
-                                                <input class="form-check-input flex-shrink-0" type="radio" name="option" value="<?= $question->option_three ?>" style="transform: scale(1.5);cursor: pointer;">
+                                                <input class="form-check-input flex-shrink-0" type="radio" name="answer" value="<?= $question->option_three ?>" style="transform: scale(1.5);cursor: pointer;" <?= $myAnswer == $question->option_three ? ' checked ' : '' ?>>
                                                 <h6 class="d-block text-black ps-3"><?= $question->option_three ?></h6>
                                             </label>
                                             <label class="list-group-item d-flex gap-2 my-1">
-                                                <input class="form-check-input flex-shrink-0" type="radio" name="option" value="<?= $question->option_four ?>" style="transform: scale(1.5);cursor: pointer;">
+                                                <input class="form-check-input flex-shrink-0" type="radio" name="answer" value="<?= $question->option_four ?>" style="transform: scale(1.5);cursor: pointer;" <?= $myAnswer == $question->option_four ? ' checked ' : '' ?>>
                                                 <h6 class="d-block text-black ps-3"><?= $question->option_four ?></h6>
                                             </label>
                                         </div>
@@ -88,6 +99,7 @@ $this->title = "Examination";
                         </div>
                     </div>
                 <?php endforeach; ?>
+                <h6 class="text-center text-danger m-0 mt-2">Click on save answer before proceeding to next question.</h6>
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-sm btn-primary my-2">Save Answer</button>
                 </div>

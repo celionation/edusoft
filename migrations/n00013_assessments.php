@@ -33,11 +33,13 @@ class n00013_assessments
             `course_level` VARCHAR(10) NULL,
             `session` VARCHAR(255) NULL,
             `status` VARCHAR(10) NOT NULL DEFAULT 'disabled',
+            `editable` VARCHAR(10) NOT NULL DEFAULT 'enabled',
             PRIMARY KEY (id), 
             INDEX assessment_title (assessment_title), 
             INDEX assessment_semester (assessment_semester), 
             INDEX course_code (course_code), 
             INDEX course_level (course_level), 
+            INDEX editable (editable), 
             INDEX department (department), 
             INDEX faculty (faculty) 
             ) ENGINE = InnoDB;";

@@ -63,7 +63,12 @@ $url = preg_replace('/(\?.+)/', '', $url);
 $currentPage = $url;
 $currentLink = $url;
 
-//\core\helpers\CoreHelpers::dnd($currentPage);
+$page = $_GET['page'] ?? '';
+$quryStr = $_SERVER['QUERY_STRING'] ? $_SERVER['QUERY_STRING'] . '&' : '';
+$quryStr = str_replace("page=" . $page, "", $_SERVER['QUERY_STRING']);
+$quryStr = !strstr($quryStr, "page=" . $page) ? $quryStr : $quryStr;
+
+// \core\helpers\CoreHelpers::dnd($quryStr);
 
 require __DIR__ . '/routes/web.php';
 

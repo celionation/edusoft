@@ -57,7 +57,7 @@ class StudentPortalController extends Controller
             'bind' => ['matriculation_no' => $this->currentUser->code_id],
             'order' => "courses.course_title"
         ];
-        
+
         $view = [
             'courses' => Courses::find($params),
         ];
@@ -81,7 +81,7 @@ class StudentPortalController extends Controller
 
             Response::redirect("student/courses/registration/new?semester=$semester&matriculation_no=$matriculation_no");
         }
-        
+
         $view = [
             'errors' => [],
             'semester' => [
@@ -137,7 +137,7 @@ class StudentPortalController extends Controller
 
         $courseStudent = new CourseStudents;
 
-        if($request->isPost()) {
+        if ($request->isPost()) {
             Session::csrfCheck();
             $courseStudent->course_id = $request->get('course_id');
             $courseStudent->course_code = $request->get('course_code');
@@ -150,9 +150,8 @@ class StudentPortalController extends Controller
                 Session::msg("Course Saved Successfully!.", 'success');
                 Response::redirect("student/courses/registration/new?semester=$semester&matriculation_no=$matriculation_no");
             }
-
         }
-        
+
         $view = [
             'errors' => $courseStudent->getErrors(),
             'courseOptions' => $courseOptions,
@@ -198,14 +197,6 @@ class StudentPortalController extends Controller
 
         $id = $request->getParam('id');
 
-        if(isset($_GET['matriculation_no'])) {
-            $matriculation_no = $request->sanitize($_GET['matriculation_no']);
-        }
-
-        if(isset($_GET['user_id'])) {
-            $user_id = $request->sanitize($_GET['user_id']);
-        }
-
         $params = [
             'conditions' => "assessment_id = :assessment_id",
             'bind' => ['assessment_id' => $id],
@@ -213,34 +204,22 @@ class StudentPortalController extends Controller
 
         $view = [
             'assessment' => Assessments::findFirst($params),
-            'matriculation_no' => $matriculation_no,
-            'user_id' => $user_id,
         ];
 
         return View::make('pages/portals/students/exams/startModal', $view);
     }
 
-    public function startExam(Request $request)
+    public function startExam(Request $request): View
     {
-        if($request->isGet()) {
-            Session::msg("You don't have the permission to write exam.", 'info');
-            Response::redirect('student/exams');
-        }
+        $this->setLayout('exam');
 
-        if($request->isPost()) {
-            Session::csrfCheck();
+        $id = $request->getParam('id');
 
-            $id = $request->getParam('id');
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 1;
 
-            if (isset($_GET['matriculation_no'])) {
-                $matriculation_no = $request->sanitize($_GET['matriculation_no']);
-            }
-
-            if (isset($_GET['user_id'])) {
-                $user_id = $request->sanitize($_GET['user_id']);
-            }
-
-            //Updating the Assessments editable table.
+        //Updating the Assessments editable table.
+        if ($request->isGet()) {
             $params = [
                 'conditions' => "assessment_id = :assessment_id",
                 'bind' => ['assessment_id' => $id],
@@ -249,45 +228,51 @@ class StudentPortalController extends Controller
 
             $assessment->inlineUpdate(['editable' => 'disabled'], ['assessment_id' => $assessment->assessment_id]);
 
-            //End of Updating the Assessments editable table.
-
-            $assesAttendparams = [
-                'conditions' => "assessment_id = :assessment_id AND user_id = :user_id AND matriculation_no = :matriculation_no",
-                'bind' => ['assessment_id' => $id, 'user_id' => $user_id, 'matriculation_no' => $matriculation_no]
-            ];
-
             // Save student to assessment_attendance lists.
-            $extAttendance = AssessmentAttendance::findFirst($assesAttendparams);
+            $assessmentAttendance = new AssessmentAttendance();
 
-            if ($extAttendance) {
-                Session::msg("You can't attend examination twice.", 'info');
-                Response::redirect('student/exams');
-            }
+            $assessmentAttendance->user_id = $this->currentUser->user_id;
+            $assessmentAttendance->matriculation_no = $this->currentUser->code_id;
+            $assessmentAttendance->assessment_id = $id;
+            $assessmentAttendance->assessment_duration = $assessment->assessment_time;
 
-            if (empty($assessmentAttendance)) {
-                $assessmentAttendance = new AssessmentAttendance();
-
-                $assessmentAttendance->user_id = $user_id;
-                $assessmentAttendance->matriculation_no = $matriculation_no;
-                $assessmentAttendance->assessment_id = $id;
-                $assessmentAttendance->assessment_duration = $assessment->assessment_time;
-
-                if ($assessmentAttendance->save()) {
-                    if(Session::exists('exam_token')) {
-                        Session::delete('exam_token');
-                    }
-                    Session::set('exam_token', GenerateToken::RandomNumber(6));
-                    Session::msg('Attedance Marked...', 'success');
-                    Response::redirect("students/examination/{$id}");
-                }
+            if ($assessmentAttendance->save()) {
+                Session::msg('Attedance Marked...', 'success');
             }
         }
 
+        $questionsParams = [
+            'conditions' => 'assessment_id = :assessment_id',
+            'bind' => ['assessment_id' => $id],
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
+        ];
+
+        $total = AssessmentQuestions::findTotal($questionsParams);
+        $numberOfPages = ceil($total / $recordsPerPage);
+
+        if ($request->isPost()) {
+            // CoreHelpers::dnd($_POST);
+            $arr['question_id'] = $_POST['question_id'];
+            $arr['answer'] = $_POST['answer'];
+
+            CoreHelpers::dnd($arr);
+        }
+
+        $view = [
+            'errors' => [],
+            'assessment' => $assessment,
+            'total' => $total,
+            'questions' => AssessmentQuestions::find($questionsParams),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
+        ];
+
+        return View::make('pages/portals/students/exams/exam', $view);
     }
 
     public function payments(): View
     {
         return View::make('pages/portals/payments/payments');
     }
-
 }

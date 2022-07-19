@@ -2,6 +2,9 @@
 
 namespace src\classes;
 
+use core\helpers\CoreHelpers;
+use src\models\AssessmentAnswer;
+use src\models\AssessmentQuestions;
 use src\models\Courses;
 use src\models\Lecturers;
 use src\models\Users;
@@ -55,5 +58,77 @@ class Extras
         }
 
         return $list->position . '.' . $list->surname . ' ' . $list->firstname;
+    }
+
+    public static function savedAnswer($saved_answer, $id)
+    {
+        if(!empty($saved_answer)) {
+            foreach($saved_answer as $sv) {
+                if($id == $sv->question_id) {
+                    return $sv->answer;
+                }
+            }
+        }
+        return '';
+    }
+
+    public static function getAnswerPercentage($assessment_id, $user_id)
+    {
+        $questionParams = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $assessment_id]
+        ];
+
+        $answerParams = [
+            'columns' => "assessment_answer.question_id, assessment_answer.answer, assessment_attendance.assessment_id",
+            'conditions' => "assessment_answer.matriculation_no = :matriculation_no",
+            'bind' => ['matriculation_no' => $user_id],
+            'joins' => [
+                ['assessment_attendance', 'assessment_answer.roll_no = assessment_attendance.roll_no'],
+            ],
+        ];
+
+        $questions = AssessmentQuestions::find($questionParams);
+        $saved_answer = AssessmentAnswer::find($answerParams);
+
+        $total_answer_count = 0;
+        if (!empty($questions)) {
+            foreach ($questions as $quest) {
+                $answer = Self::savedAnswer($saved_answer, $quest->question_id);
+                if (trim($answer) != "") {
+                    $total_answer_count++;
+                }
+            }
+        }
+
+        if ($total_answer_count > 0) {
+            $total_questions = count($questions);
+
+            return floor(($total_answer_count / $total_questions) * 100);
+        }
+
+        return 0;
+    }
+    
+    public static function getAnswerPercentage_one($questions, $saved_answer)
+    {
+        $total_answer_count = 0;
+
+        if(!empty($questions)) {
+            foreach ($questions as $quest) {
+                $answer = Self::savedAnswer($saved_answer, $quest->question_id);
+                if (trim($answer) != "") {
+                    $total_answer_count++;
+                }
+            }
+        }
+
+        if ($total_answer_count > 0) {
+            $total_questions = count($questions);
+
+            return ($total_answer_count / $total_questions) * 100;
+        }
+
+        return 0;
     }
 }

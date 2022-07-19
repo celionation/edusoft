@@ -255,7 +255,7 @@ class AdmissionController extends Controller
         Permission::permRedirect(['admin', 'registrar'], 'admin/dashboard');
 
         $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
-        $recordsPerPage = 1;
+        $recordsPerPage = 5;
 
         $params = [
             'conditions' => "status = 'admitted'",

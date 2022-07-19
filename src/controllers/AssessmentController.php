@@ -183,8 +183,12 @@ class AssessmentController extends Controller
         ];
 
         $assesQuestParams = [
-            'conditions' => "question_id = :question_id AND user_id = :user_id",
-            'bind' => ['question_id' => $id, 'user_id' => $this->currentUser->user_id]
+            'columns' => "assessment_questions.*, assessments.editable",
+            'conditions' => "assessment_questions.question_id = :question_id AND assessment_questions.user_id = :user_id AND assessments.editable = 'enabled'",
+            'bind' => ['question_id' => $id, 'user_id' => $this->currentUser->user_id],
+            'joins' => [
+                ['assessments', 'assessment_questions.assessment_id = assessments.assessment_id']
+            ],
         ];
 
         $assessmentQuestion = $id == 'new' ? new AssessmentQuestions() : AssessmentQuestions::findFirst($assesQuestParams);
@@ -207,11 +211,6 @@ class AssessmentController extends Controller
 
             if ($id != 'new') {
                 $upload->required = false;
-            }
-
-            if (isset($type) && $type == "multiple") {
-                //for multiple choice
-                
             }
 
             $uploadErrors = $upload->validate();

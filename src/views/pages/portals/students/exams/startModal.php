@@ -1,5 +1,6 @@
 <?php
 
+use core\forms\Form;
 use src\classes\Extras;
 
 $this->title = "Student Examination Start.";
@@ -42,7 +43,11 @@ $this->title = "Student Examination Start.";
                 </table>
             </div>
             <div class="modal-footer flex-nowrap p-0">
-                <button type="button" onclick="startBtn('<?= $assessment->assessment_id ?>', '<?= $matriculation_no ?>', '<?= $user_id ?>')" class="btn btn-lg btn-primary fs-6 text-decoration-none col-6 m-0 rounded-0 border-right"><strong>Start</strong></button>
+                <form action="/student/exam/<?= $assessment->assessment_id ?>?matriculation_no=<?= $matriculation_no ?>&user_id=<?= $user_id ?>" method="post" class="col-6 m-0 border-right btn-primary text-decoration-none">
+                <?= Form::csrfField() ?>
+                    <button type="submit" class="btn btn-lg btn-primary fs-6 text-decoration-none w-100"><strong>Start</strong></button>
+                </form>
+
                 <button type="button" onclick="cancelBtn()" class="btn btn-lg btn-danger fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">No thanks</button>
             </div>
         </div>
@@ -50,7 +55,7 @@ $this->title = "Student Examination Start.";
 </div>
 
 <script>
-    function startBtn(id, matricNo, userId, type) {
+    function startBtn(id, matricNo, userId) {
         window.location.href = `/student/exam/${id}?matriculation_no=${matricNo}&user_id=${userId}`;
     }
 

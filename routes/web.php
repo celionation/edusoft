@@ -10,6 +10,7 @@ use src\controllers\StudentController;
 use src\controllers\LecturerController;
 use src\controllers\AdmissionController;
 use src\controllers\AssessmentController;
+use src\controllers\ExaminationController;
 use src\controllers\StaffPortalController;
 use src\controllers\StudentPortalController;
 
@@ -31,6 +32,11 @@ use src\controllers\StudentPortalController;
 
 $app->router->get('/', [SiteController::class, 'index']);
 
+// Students Examiantion --- Using Jquery
+$app->router->get('/students/examination/{id}', [ExaminationController::class, 'examination']);
+$app->router->post('/students/examination/{id}', [ExaminationController::class, 'examination']);
+
+
 // Portals
 
 //---students
@@ -45,6 +51,7 @@ $app->router->get('/student/exams', [StudentPortalController::class, 'exams']);
 $app->router->get('/student/exams/confirm_exam/{id}', [StudentPortalController::class, 'confirmExam']);
 //doing exam.
 $app->router->get('/student/exam/{id}', [StudentPortalController::class, 'startExam']);
+$app->router->post('/student/exam/{id}', [StudentPortalController::class, 'startExam']);
 
 //---payments -to be remove cause am not using it anymore.
 $app->router->get('/student/payments', [StudentPortalController::class, 'payments']);
@@ -53,6 +60,8 @@ $app->router->get('/staffs_portal', [StaffPortalController::class, 'staffs']);
 
 //---lecturers
 $app->router->get('/staffs_portal/lecturers', [StaffPortalController::class, 'lecturers']);
+$app->router->get('/lecturer/exams', [StaffPortalController::class, 'exams']);
+$app->router->get('/lecturer/exam/students/{id}', [StaffPortalController::class, 'examStudents']);
 
 //Assessment - Continous Assessment
 $app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class, 'continousAssessment']);

@@ -1,5 +1,7 @@
 <?php
 
+use src\classes\Extras;
+
 
 /** @var mixed $currentUser */
 global $currentUser;
@@ -26,6 +28,7 @@ $this->title = "Student Examination Lists.";
                     <th>Course Code</th>
                     <th>Duration</th>
                     <th>Status</th>
+                    <th>Progress</th>
                     <th></th>
                 </tr>
             </thead>
@@ -40,6 +43,8 @@ $this->title = "Student Examination Lists.";
                         <?php else : ?>
                             <td class="text-success fw-bold"><?= $assessment->courseStatus ?></td>
                         <?php endif; ?>
+                        <?php $percentage = Extras::getAnswerPercentage($assessment->assessment_id, $currentUser->code_id) ?>
+                        <td><?= $percentage ?>%</td>
                         <td class="text-end">
                             <?php if (isset($student->exam_permission) && $student->exam_permission == 'accepted') : ?>
                                 <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Take Exam" onclick="takeExam('<?= $assessment->assessment_id ?>', '<?= $student->matriculation_no ?>', '<?= $currentUser->user_id ?>')">Take Exam</button>

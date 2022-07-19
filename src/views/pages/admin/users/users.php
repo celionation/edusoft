@@ -5,6 +5,7 @@ use core\helpers\CoreHelpers;
 use src\classes\Extras;
 
 global $currentLink;
+global $quryStr;
 
 $this->title = "Admin Users";
 
@@ -62,10 +63,10 @@ $this->title = "Admin Users";
                     <nav aria-label="Pagination">
                         <ul class="d-flex justify-content-evenly align-items-center my-1 pagination">
                             <li class="page-item <?= !$prevPage ? 'disabled' : '' ?>" aria-current="page">
-                                <a class="page-link" href="<?= ROOT . $currentLink ?>?page=<?= $prevPage ?>">Prev</a>
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?<?= $quryStr ?>page=<?= $prevPage ?>">Prev</a>
                             </li>
                             <li class="page-item <?= !$nextPage ? 'disabled' : '' ?>" aria-current="page">
-                                <a class="page-link" href="<?= ROOT . $currentLink ?>?page=<?= $nextPage ?>">Next</a>
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?<?= $quryStr ?>page=<?= $nextPage ?>">Next</a>
                             </li>
                         </ul>
                     </nav>

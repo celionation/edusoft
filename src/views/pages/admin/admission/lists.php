@@ -12,18 +12,13 @@ $this->title = "Admission Lists";
     <div class="col-md-12 mx-auto shadow p-2">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <?php if (!isset($_GET['list'])) : ?>
-                        <h5 class="text-muted">Admission on Progress</h5>
-                        <div>
-                            <a href="/admin/admission/lists/admitted?list=admitted" class="btn btn-sm btn-primary">Admitted Lists</a>
-                        </div>
-                    <?php else : ?>
-                        <h5 class="text-muted">Admitted Students</h5>
-                        <div>
-                            <a href="/admin/admission/lists" class="btn btn-sm btn-info">Progress Lists</a>
-                        </div>
-                    <?php endif; ?>
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                    <div class="">
+                        <a href="/admin/admission/lists" class="btn btn-sm btn-info">Progress Lists</a>
+                    </div>
+                    <div>
+                        <a href="/admin/admission/lists/admitted" class="btn btn-sm btn-primary">Admitted Lists</a>
+                    </div>
                 </div>
 
                 <hr class="mt-1">

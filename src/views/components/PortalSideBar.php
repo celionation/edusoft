@@ -20,6 +20,10 @@ global $currentUser;
             <?php else : ?>
                 <?= Navigation::navItem('staffs_portal', 'Dashboard') ?>
             <?php endif; ?>
+
+            <?php if ($currentUser->acl == 'staff') : ?>
+                <?= Navigation::navItem('lecturer/exams', 'Examinations') ?>
+            <?php endif; ?>
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
