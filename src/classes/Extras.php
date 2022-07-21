@@ -7,6 +7,7 @@ use src\models\AssessmentAnswer;
 use src\models\AssessmentQuestions;
 use src\models\Courses;
 use src\models\Lecturers;
+use src\models\SubmittedAssessment;
 use src\models\Users;
 
 class Extras
@@ -110,11 +111,10 @@ class Extras
         return 0;
     }
     
-    public static function getAnswerPercentage_one($questions, $saved_answer)
+    public static function getPercentage($questions, $saved_answer)
     {
         $total_answer_count = 0;
-
-        if(!empty($questions)) {
+        if (!empty($questions)) {
             foreach ($questions as $quest) {
                 $answer = Self::savedAnswer($saved_answer, $quest->question_id);
                 if (trim($answer) != "") {
@@ -126,9 +126,20 @@ class Extras
         if ($total_answer_count > 0) {
             $total_questions = count($questions);
 
-            return ($total_answer_count / $total_questions) * 100;
+            return floor(($total_answer_count / $total_questions) * 100);
         }
 
         return 0;
+    }
+
+    public static function sumittedAssessment($assessment_id, $roll_no, $user_id)
+    {
+        $params = [
+            'conditions' => "assessment_id = :assessment_id AND roll_no = :roll_no AND matriculation_no = :matriculation_no",
+            'bind' => ['assessment_id' => $assessment_id, 'roll_no' => $roll_no, 'matriculation_no' => $user_id],
+            'limit' => '1',
+        ];
+
+        return $submittedData = SubmittedAssessment::findFirst($params);
     }
 }

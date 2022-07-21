@@ -121,7 +121,7 @@ class Form
      * @param array $errors
      * @return string
      */
-    public static function textareaField($label, $id, $value, array $inputAttrs = [], array $wrapperAttrs = [], array $errors = []): string
+    public static function textareaField($label, $id, $value, array $inputAttrs = [], array $wrapperAttrs = [], array $errors = [], string $disabled = ''): string
     {
         $wrapperStr = self::processAttrs($wrapperAttrs);
         $inputAttrs = self::appendErrors($id, $inputAttrs, $errors);
@@ -129,7 +129,7 @@ class Form
         $errorMsg = array_key_exists($id, $errors) ? $errors[$id] : "";
         $html = "<div $wrapperStr>";
         $html .= "<label for='$id'>$label</label>";
-        $html .= "<textarea id='$id' name='$id' value='$value' $inputAttrs>$value</textarea>";
+        $html .= "<textarea id='$id' name='$id' value='$value' $inputAttrs, $disabled>$value</textarea>";
         $html .= "<div class='form-text invalid-feedback'>$errorMsg</div></div>";
         return $html;
     }

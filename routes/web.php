@@ -8,6 +8,7 @@ use src\controllers\AdminController;
 use src\controllers\CourseController;
 use src\controllers\StudentController;
 use src\controllers\LecturerController;
+use src\controllers\MarkingsController;
 use src\controllers\AdmissionController;
 use src\controllers\AssessmentController;
 use src\controllers\ExaminationController;
@@ -35,6 +36,7 @@ $app->router->get('/', [SiteController::class, 'index']);
 // Students Examiantion --- Using Jquery
 $app->router->get('/students/examination/{id}', [ExaminationController::class, 'examination']);
 $app->router->post('/students/examination/{id}', [ExaminationController::class, 'examination']);
+$app->router->get('/examination/submitted/{id}', [ExaminationController::class, 'submitted']);
 
 
 // Portals
@@ -62,6 +64,10 @@ $app->router->get('/staffs_portal', [StaffPortalController::class, 'staffs']);
 $app->router->get('/staffs_portal/lecturers', [StaffPortalController::class, 'lecturers']);
 $app->router->get('/lecturer/exams', [StaffPortalController::class, 'exams']);
 $app->router->get('/lecturer/exam/students/{id}', [StaffPortalController::class, 'examStudents']);
+// --- Assessment To Mark.
+$app->router->get('/assessments/to_mark', [MarkingsController::class, 'toMark']);
+$app->router->get('/assessments/marked', [MarkingsController::class, 'marked']);
+$app->router->get('/assessments/to_mark/student/{id}', [MarkingsController::class, 'student']);
 
 //Assessment - Continous Assessment
 $app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class, 'continousAssessment']);

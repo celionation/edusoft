@@ -103,7 +103,7 @@ $this->title = "Create Examination Question";
                                 </div>
                                 <div class="card-footer bg-black text-white">
                                     <div class="col-md-12">
-                                        <?= Form::selectField('Select Correct Option', 'correct_answer', $questions->correct_answer ?? '', $Options, ['class' => 'form-control'], ['class' => 'mb-3 col'], $errors); ?>
+                                        <?= Form::inputField('Answer', 'correct_answer', $questions->correct_answer ?? '', ['class' => 'form-control', 'placeholder' => 'Answer...'], ['class' => 'mb-2 col-md-12'], $errors) ?>
                                     </div>
                                 </div>
                             </div>

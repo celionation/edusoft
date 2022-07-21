@@ -18,6 +18,7 @@ use src\models\CourseStudents;
 use core\helpers\GenerateToken;
 use src\models\AssessmentAnswer;
 use src\models\AssessmentAttendance;
+use src\models\SubmittedAssessment;
 
 class StaffPortalController extends Controller
 {
@@ -39,7 +40,26 @@ class StaffPortalController extends Controller
     {
         Permission::permRedirect(['staff'], '');
 
-        $view = [];
+        $toMarkParams = [
+            'conditions' => "submitted = 'yes' AND marked = 'no' AND assessments.user_id = :user_id",
+            'joins' => [
+                ['assessments', 'submitted_assessment.assessment_id = assessments.assessment_id'],
+            ],
+            'bind' => ['user_id' => $this->currentUser->user_id],
+        ];
+
+        $markedParams = [
+            'conditions' => "submitted = 'yes' AND marked = 'yes' AND assessments.user_id = :user_id",
+            'joins' => [
+                ['assessments', 'submitted_assessment.assessment_id = assessments.assessment_id'],
+            ],
+            'bind' => ['user_id' => $this->currentUser->user_id],
+        ];
+
+        $view = [
+            'tomarkTotal' => SubmittedAssessment::findTotal($toMarkParams),
+            'markedTotal' => SubmittedAssessment::findTotal($markedParams),
+        ];
 
         return View::make('pages/portals/staffs/dashboard', $view);
     }
@@ -67,22 +87,26 @@ class StaffPortalController extends Controller
 
         $id = $request->getParam('id');
 
+        $assessParams = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $id],
+        ];
+
         $params = [
-            'columns' => "assessment_attendance.*, students.surname, students.firstname, students.lastname, assessment_answer.roll_no, assessments.assessment_title",
-            'conditions' => "assessment_attendance.matriculation_no = students.matriculation_no AND assessment_attendance.roll_no = assessment_answer.roll_no AND assessment_attendance.assessment_id = :assessment_id",
+            'columns' => "assessment_attendance.*, students.surname, students.firstname, students.lastname, assessments.assessment_title",
+            'conditions' => "assessment_attendance.assessment_id = :assessment_id",
             'joins' => [
                 ['students', 'assessment_attendance.matriculation_no = students.matriculation_no'],
-                ['assessment_answer', 'assessment_attendance.roll_no = assessment_answer.roll_no'],
                 ['assessments', 'assessment_attendance.assessment_id = assessments.assessment_id'],
             ],
             'bind' => ['assessment_id' => $id],
             'order' => "students.surname, students.firstname"
         ];
 
-        // CoreHelpers::dnd(AssessmentAttendance::find($params));
-
         $view = [
+            'assessment' => Assessments::findFirst($assessParams),
             'students' => AssessmentAttendance::find($params),
+            'studentsTotal' => AssessmentAttendance::findTotal($params),
         ];
 
         return View::make('pages/portals/staffs/lecturers/examStudents', $view);

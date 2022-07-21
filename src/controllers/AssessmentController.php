@@ -245,13 +245,6 @@ class AssessmentController extends Controller
             'errors' => $assessmentQuestion->getErrors(),
             'assessment' => Assessments::findFirst($params),
             'questions' => $assessmentQuestion,
-            'Options' => [
-                '' => '---',
-                'option_one' => 'Option One',
-                'option_two' => 'Option Two',
-                'option_three' => 'Option Three',
-                'option_four' => 'Option Four'
-            ],
         ];
 
         return View::make('pages/portals/exams/create', $view);

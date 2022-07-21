@@ -24,8 +24,11 @@ class n00016_assessment_answer
             `matriculation_no` VARCHAR(100) NULL,
             `question_id` VARCHAR(30) NULL,
             `answer` TEXT NULL,
+            `mark` VARCHAR(20) NULL DEFAULT 'pending',
+            `comment` VARCHAR(1024) NULL,
             PRIMARY KEY (id), 
             INDEX roll_no (roll_no), 
+            INDEX mark (mark), 
             INDEX question_id (question_id) 
             ) ENGINE = InnoDB;";
         $db->_dbh->exec($SQL);

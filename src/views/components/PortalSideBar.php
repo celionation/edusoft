@@ -39,7 +39,6 @@ global $currentUser;
             <?php endif; ?>
             <?php if ($currentUser->acl == 'staff') : ?>
                 <?= Navigation::navItemIcon('lecturer/cont_asses/questions/new', 'Cont.Asses Questions', 'fas fa-file-signature') ?>
-                <?= Navigation::navItemIcon('lecturer/exam/questions/new', 'Examination Questions', 'fas fa-file-signature') ?>
             <?php endif; ?>
             <!-- at dashboard -->
             <?= Navigation::navItemIcon('admin/helpdesk', 'Help-desk', 'fas fa-question-circle') ?>

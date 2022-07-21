@@ -15,6 +15,8 @@ use core\helpers\CoreHelpers;
 use src\models\AssessmentAnswer;
 use src\models\AssessmentQuestions;
 use src\models\AssessmentAttendance;
+use src\models\CourseStudents;
+use src\models\SubmittedAssessment;
 
 class ExaminationController extends Controller
 {
@@ -115,6 +117,7 @@ class ExaminationController extends Controller
         $view = [
             'errors' => [],
             'total' => $total,
+            'extAttendance' => $extAttendance,
             'assessment' => $assessment,
             'savedAnswer' => AssessmentAnswer::find($savedAnswerParams),
             'questions' => AssessmentQuestions::find($questionsParams),
@@ -123,6 +126,47 @@ class ExaminationController extends Controller
         ];
 
         return View::make('pages/examination/examination', $view);
+    }
+
+    public function submitted(Request $request)
+    {
+        $id = $request->getParam('id');
+
+        if(isset($_GET['roll'])) {
+            $roll = $request->sanitize($_GET['roll']);
+        }
+
+        if(isset($_GET['matric_no'])) {
+            $matricNo = $request->sanitize($_GET['matric_no']);
+        }
+
+        $submitted = new SubmittedAssessment();
+
+        $submitted->assessment_id = $id;
+        $submitted->roll_no = $roll;
+        $submitted->matriculation_no = $matricNo;
+        $submitted->submitted = 'yes';
+        $submitted->marked = 'no';
+
+        $assesParams = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $id]
+        ];
+
+        $assessments = Assessments::findFirst($assesParams);
+
+        $studentCourse = new CourseStudents();
+
+        $courseParam = [
+            'course_code' => $assessments->course_code,
+            'matriculation_no' => $matricNo
+        ];
+
+        if($submitted->save()) {
+            $studentCourse->inlineUpdate(['status' => 'completed'], $courseParam);
+            Session::msg('Examination Submitted Successfully!.', 'success');
+            Response::redirect('student/exams'); 
+        }
     }
 
 }
