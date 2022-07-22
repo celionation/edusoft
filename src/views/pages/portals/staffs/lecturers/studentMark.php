@@ -67,6 +67,11 @@ $this->title = "Mark Student";
                         <div class="progress-bar bg-info" style="width: <?= $markedPercentage ?>%;" role="progressbar" aria-valuenow="<?= $markedPercentage ?>" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
+                <div class="text-center">
+                    <?php $score = Extras::getScorePercentage($assessment->assessment_id, $assessment->matriculation_no) ?>
+                    <small>Your Score: </small>
+                    <h3><?= $score ?>%</h3>
+                </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="text-sm text-capitalize border-bottom border-3 border-primary mt-2 py-1"><span class="text-danger">Name: </span> <?= $assessment->surname . ' ' . $assessment->firstname . ' ' . $assessment->lastname ?></h5>
                     <div class="d-flex justify-content-around align-items-center">

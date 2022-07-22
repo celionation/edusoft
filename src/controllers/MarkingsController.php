@@ -129,7 +129,7 @@ class MarkingsController extends Controller
                 Session::msg("{$percent}% Marked: You can only set Exam as Marked after all Question has been Marked.", 'warning');
                 Response::redirect("assessments/to_mark/student/{$id}");
             }
-            
+
             $markedDetails = [
                 'marked' => $marked,
                 'marked_by' => $this->currentUser->status . '. ' . $this->currentUser->surname . ' ' . $this->currentUser->firstname . ' ' . $this->currentUser->lastname
@@ -156,7 +156,7 @@ class MarkingsController extends Controller
 
                 $answer = AssessmentAnswer::findFirst($answerParams);
             
-                if($answer->inlineUpdate(['mark' => $mark], ['question_id' => $question_id])) {
+                if($answer->inlineUpdate(['mark' => $mark], ['question_id' => $question_id, 'roll_no' => $id])) {
                     // Session::msg('Marked.', 'success');
                 }
             }

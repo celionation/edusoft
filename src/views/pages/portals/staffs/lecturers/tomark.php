@@ -12,6 +12,7 @@ $this->title = "Assessment To Mark";
     <div class="col-md-12 mx-auto shadow p-2">
         <div class="card">
             <div class="card-body">
+                <a href="/staffs_portal" class="btn btn-sm btn-warning my-2"><i class="fas fa-chevron-left"></i> Back</a>
                 <?php if ($toMarks) : ?>
                     <table class="table table-responsive table-hover">
                         <thead class="table-danger">
