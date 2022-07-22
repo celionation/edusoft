@@ -73,6 +73,18 @@ class Extras
         return '';
     }
 
+    public static function getMarked($saved_answer, $id)
+    {
+        if(!empty($saved_answer)) {
+            foreach($saved_answer as $sv) {
+                if($id == $sv->question_id) {
+                    return $sv->mark;
+                }
+            }
+        }
+        return '';
+    }
+
     public static function getAnswerPercentage($assessment_id, $user_id)
     {
         $questionParams = [
@@ -110,14 +122,30 @@ class Extras
 
         return 0;
     }
-    
-    public static function getPercentage($questions, $saved_answer)
+    public static function getMarkedPercentage($assessment_id, $user_id)
     {
+        $questionParams = [
+            'conditions' => "assessment_id = :assessment_id",
+            'bind' => ['assessment_id' => $assessment_id]
+        ];
+
+        $answerParams = [
+            'columns' => "assessment_answer.*, assessment_attendance.assessment_id",
+            'conditions' => "assessment_answer.matriculation_no = :matriculation_no AND assessment_answer.mark != 'pending'",
+            'bind' => ['matriculation_no' => $user_id],
+            'joins' => [
+                ['assessment_attendance', 'assessment_answer.roll_no = assessment_attendance.roll_no'],
+            ],
+        ];
+
+        $questions = AssessmentQuestions::find($questionParams);
+        $saved_answer = AssessmentAnswer::find($answerParams);
+
         $total_answer_count = 0;
         if (!empty($questions)) {
             foreach ($questions as $quest) {
-                $answer = Self::savedAnswer($saved_answer, $quest->question_id);
-                if (trim($answer) != "") {
+                $answer = Self::getMarked($saved_answer, $quest->question_id);
+                if (trim($answer) > 0) {
                     $total_answer_count++;
                 }
             }
@@ -131,6 +159,27 @@ class Extras
 
         return 0;
     }
+    
+    // public static function getPercentage($questions, $saved_answer)
+    // {
+    //     $total_answer_count = 0;
+    //     if (!empty($questions)) {
+    //         foreach ($questions as $quest) {
+    //             $answer = Self::savedAnswer($saved_answer, $quest->question_id);
+    //             if (trim($answer) != "") {
+    //                 $total_answer_count++;
+    //             }
+    //         }
+    //     }
+
+    //     if ($total_answer_count > 0) {
+    //         $total_questions = count($questions);
+
+    //         return floor(($total_answer_count / $total_questions) * 100);
+    //     }
+
+    //     return 0;
+    // }
 
     public static function sumittedAssessment($assessment_id, $roll_no, $user_id)
     {

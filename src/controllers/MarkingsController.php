@@ -12,8 +12,10 @@ use src\models\Users;
 use src\classes\Permission;
 use src\models\Assessments;
 use core\helpers\CoreHelpers;
-use src\models\AssessmentAttendance;
+use src\models\CourseStudents;
+use src\models\AssessmentAnswer;
 use src\models\SubmittedAssessment;
+use src\models\AssessmentAttendance;
 
 class MarkingsController extends Controller
 {
@@ -83,7 +85,15 @@ class MarkingsController extends Controller
     {
         Permission::permRedirect(['staff'], '');
 
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $id = $request->getParam('id');
+
+        $submittedParams = [
+            'conditions' => "roll_no = :roll_no AND submitted = 'yes' AND marked = 'no'",
+            'bind' => ['roll_no' => $id],
+        ];
 
         $assessmentParams = [
             'columns' => "assessment_attendance.*, assessments.*, users.surname, users.firstname, users.lastname",
@@ -103,15 +113,110 @@ class MarkingsController extends Controller
                 ['assessment_questions', 'assessment_answer.question_id = assessment_questions.question_id'],
             ],
             'bind' => ['roll_no' => $id],
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
-            // CoreHelpers::dnd(AssessmentAttendance::find($params));
+
+        $total = AssessmentAttendance::findTotal($params);
+        $numberOfPages = ceil($total / $recordsPerPage);
+
+        // Update Submitted data, as Marked.
+        if (isset($_GET['marked']) && isset($_GET['percent'])) {
+            $marked = $request->sanitize($_GET['marked']);
+            $percent = $request->sanitize($_GET['percent']);
+
+            if($percent < 100) {
+                Session::msg("{$percent}% Marked: You can only set Exam as Marked after all Question has been Marked.", 'warning');
+                Response::redirect("assessments/to_mark/student/{$id}");
+            }
+            
+            $markedDetails = [
+                'marked' => $marked,
+                'marked_by' => $this->currentUser->status . '. ' . $this->currentUser->surname . ' ' . $this->currentUser->firstname . ' ' . $this->currentUser->lastname
+            ];
+
+            $submitAssessment = new SubmittedAssessment();
+
+            if ($submitAssessment->inlineUpdate($markedDetails, ['roll_no' => $id])) {
+                Session::msg('Examination Markings Completed.', 'success');
+                Response::redirect("assessments/to_mark/student/{$id}");
+            }
+        }
+
+        if($request->isPost()) {
+            
+            foreach($_POST as $key => $value) {
+                $question_id = $key;
+                $mark = $value;
+
+                $answerParams = [
+                    'conditions' => "roll_no = :roll_no AND question_id = :question_id",
+                    'bind' => ['roll_no' => $id, 'question_id' => $question_id],
+                ];
+
+                $answer = AssessmentAnswer::findFirst($answerParams);
+            
+                if($answer->inlineUpdate(['mark' => $mark], ['question_id' => $question_id])) {
+                    // Session::msg('Marked.', 'success');
+                }
+            }
+            Session::msg('Marked.', 'success');
+
+        }
 
         $view = [
+            'submitted' => SubmittedAssessment::findFirst($submittedParams),
             'assessment' => AssessmentAttendance::findFirst($assessmentParams),
             'questions' => AssessmentAttendance::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/portals/staffs/lecturers/studentMark', $view);
+    }
+
+    public function decline(Request $request)
+    {
+        Permission::permRedirect(['staff'], '');
+
+        $id = $request->getParam('id');
+
+        $submitParams = [
+            'conditions' => "roll_no = :roll_no",
+            'bind' => ['roll_no' => $id],
+        ];
+
+        $submitAssessment = SubmittedAssessment::findFirst($submitParams);
+        
+        if($submitAssessment) {
+
+            $attendanceParams = [
+            'conditions' => "roll_no = :roll_no AND matriculation_no = :matriculation_no AND assessment_id = :assessment_id",
+            'bind' => ['roll_no' => $submitAssessment->roll_no, 'matriculation_no' => $submitAssessment->matriculation_no, 'assessment_id' => $submitAssessment->assessment_id],
+        ];
+
+            $answerParams = [
+            'conditions' => "roll_no = :roll_no AND matriculation_no = :matriculation_no",
+            'bind' => ['roll_no' => $submitAssessment->roll_no, 'matriculation_no' => $submitAssessment->matriculation_no],
+        ];
+
+            $assessmentAttendance = AssessmentAttendance::findFirst($attendanceParams);
+            $assessmentAnswers = AssessmentAnswer::find($answerParams);
+
+
+            $studentCourse = new CourseStudents();
+
+            $studentCourse->inlineUpdate(['status' => 'declined'], ['matriculation_no' => $submitAssessment->matriculation_no]);
+
+            foreach($assessmentAnswers as $answers) {
+                $answers->delete();
+            }
+            $assessmentAttendance->delete();
+            $submitAssessment->delete();
+
+            Session::msg('Examination Decline Now Student Can retake Exam!.', 'success');
+            Response::redirect('assessments/to_mark');
+        }
     }
 
 }

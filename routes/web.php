@@ -67,7 +67,10 @@ $app->router->get('/lecturer/exam/students/{id}', [StaffPortalController::class,
 // --- Assessment To Mark.
 $app->router->get('/assessments/to_mark', [MarkingsController::class, 'toMark']);
 $app->router->get('/assessments/marked', [MarkingsController::class, 'marked']);
+$app->router->get('/assessments/marked/student/{id}', [MarkingsController::class, 'student']);
 $app->router->get('/assessments/to_mark/student/{id}', [MarkingsController::class, 'student']);
+$app->router->post('/assessments/to_mark/student/{id}', [MarkingsController::class, 'student']);
+$app->router->get('/assessments/student/decline/{id}', [MarkingsController::class, 'decline']);
 
 //Assessment - Continous Assessment
 $app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class, 'continousAssessment']);

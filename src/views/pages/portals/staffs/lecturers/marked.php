@@ -28,7 +28,7 @@ $this->title = "Assessment Marked";
                             <?php foreach ($marked as $mark) : ?>
                                 <?php $percentage = Extras::getAnswerPercentage($mark->assessment_id, $mark->matriculation_no) ?>
                                 <tr>
-                                    <td><a href=""><i class="fas fa-check bg-primary p-2 rounded-circle text-white"></i></a></td>
+                                    <td><a href="/assessments/marked/student/<?= $mark->roll_no ?>"><i class="fas fa-check bg-primary p-2 rounded-circle text-white"></i></a></td>
                                     <td><?= $mark->assessment_title ?></td>
                                     <td><?= $mark->course_code ?></td>
                                     <td><?= $mark->surname . ' ' . $mark->firstname . ' ' . $mark->lastname ?></td>

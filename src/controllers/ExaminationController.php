@@ -98,6 +98,7 @@ class ExaminationController extends Controller
             $assessmentAnswer->matriculation_no = $this->currentUser->code_id;
             $assessmentAnswer->question_id = $question_id;
             $assessmentAnswer->answer = $answer;
+            $assessmentAnswer->mark = 'pending';
 
             if($assessmentAnswer->save()) {
                 Session::msg('Question Saved.', 'info');
@@ -163,6 +164,7 @@ class ExaminationController extends Controller
         ];
 
         if($submitted->save()) {
+            Session::delete('exam_token');
             $studentCourse->inlineUpdate(['status' => 'completed'], $courseParam);
             Session::msg('Examination Submitted Successfully!.', 'success');
             Response::redirect('student/exams'); 
