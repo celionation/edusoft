@@ -405,4 +405,12 @@ class AdminController extends Controller
         return View::make('pages/admin/grades/create', $view);
     }
 
+    // To be deleted after testing is done.
+    public function reports(Request $request): View
+    {
+        $view = [];
+
+        return View::make('pages/admin/reports', $view);
+    }
+
 }

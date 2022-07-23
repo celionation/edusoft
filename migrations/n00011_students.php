@@ -35,7 +35,7 @@ class n00011_students
             `phone` VARCHAR(20) NOT NULL,
             `dob` DATE NULL,
             `standing` VARCHAR(20) NULL DEFAULT 'good',
-            `ass_permission` VARCHAR(20) NULL DEFAULT 'declined',
+            `ass_permission` VARCHAR(20) NOT NULL DEFAULT 'declined',
             PRIMARY KEY (id), 
             INDEX ref_no (ref_no), 
             INDEX matriculation_no (matriculation_no), 

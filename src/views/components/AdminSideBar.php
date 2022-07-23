@@ -11,7 +11,7 @@ use core\helpers\Navigation;
             <?= Navigation::navItem('admin/dashboard', 'Dashboard') ?>
             <?= Navigation::navItem('admin/account', 'Account') ?>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/admin/reports">
                     <span data-feather="bar-chart-2"></span>
                     Reports
                 </a>

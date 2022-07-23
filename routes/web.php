@@ -99,6 +99,7 @@ $app->router->get('/logout', [AuthController::class, 'logout']);
 // Admin
 $app->router->get('/admin/dashboard', [AdminController::class, 'dashboard']);
 $app->router->get('/admin/account', [AdminController::class, 'account']);
+$app->router->get('/admin/reports', [AdminController::class, 'reports']);
 
 //Admission
 $app->router->get('/admin/admission', [AdmissionController::class, 'admission']);
