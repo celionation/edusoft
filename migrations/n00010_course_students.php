@@ -27,6 +27,7 @@ class n00010_course_students
             `user_id` VARCHAR(100) NOT NULL,
             `status` VARCHAR(20) NULL DEFAULT 'waiting',
             `grade` VARCHAR(10) NULL,
+            `grade_point` INT NULL,
             `result` VARCHAR(100) NULL,
             PRIMARY KEY (id)  
             ) ENGINE = InnoDB;";

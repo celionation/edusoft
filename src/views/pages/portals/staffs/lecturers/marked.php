@@ -2,6 +2,9 @@
 
 use src\classes\Extras;
 
+global $currentLink;
+global $quryStr;
+
 $this->title = "Assessment Marked";
 
 ?>
@@ -44,6 +47,18 @@ $this->title = "Assessment Marked";
                             </tr>
                         </tfoot>
                     </table>
+                    <!-- Pagination -->
+                    <nav aria-label="Pagination" class="my-2">
+                        <ul class="d-flex justify-content-evenly align-items-center my-1 pagination">
+                            <li class="page-item <?= !$prevPage ? 'disabled' : '' ?>" aria-current="page">
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?<?= $quryStr ?>page=<?= $prevPage ?>">Prev</a>
+                            </li>
+                            <li class="page-item <?= !$nextPage ? 'disabled' : '' ?>" aria-current="page">
+                                <a class="page-link" href="<?= ROOT . $currentLink ?>?<?= $quryStr ?>page=<?= $nextPage ?>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- //Pagination -->
                 <?php else : ?>
                     <h6 class="text-center text-muted small border-bottom border-3 border-danger py-1">No Data yet!.</h6>
                 <?php endif; ?>

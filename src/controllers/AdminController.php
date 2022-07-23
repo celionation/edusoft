@@ -19,6 +19,7 @@ use src\classes\Permission;
 use core\helpers\FileUpload;
 use core\helpers\CoreHelpers;
 use core\helpers\GenerateToken;
+use src\models\Grades;
 
 class AdminController extends Controller
 {
@@ -277,7 +278,6 @@ class AdminController extends Controller
             foreach ($fields as $field) {
                 $role->{$field} = strtolower($request->get($field));
             }
-            $role->role_id = GenerateToken::randomString(60);
 
             if ($role->save()) {
                 Session::msg('Roles Saved Successfully', 'success');
@@ -334,6 +334,75 @@ class AdminController extends Controller
         ];
 
         return View::make('pages/admin/levels/levels', $view);
+    }
+
+    public function grades(Request $request): View
+    {
+        Permission::permRedirect(['admin', 'vc'], '');
+
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
+        $params = [
+            'order' => 'created_at',
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
+        ];
+
+        $total = Grades::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
+
+        $view = [
+            'grades' => Grades::find($params),
+            'total' => $total,
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
+        ];
+
+        return View::make('pages/admin/grades/grades', $view);
+    }
+
+    public function creategrade(Request $request): View
+    {
+        Permission::permRedirect(['admin', 'vc'], '');
+
+        $id = $request->getParam('id');
+
+        $params = [
+            'conditions' => "grade_id = :grade_id",
+            'bind' => ['grade_id' => $id]
+        ];
+
+        if ($id == 'new') {
+            $grade = new Grades();
+        } else {
+            $grade = Grades::findFirst($params);
+        }
+
+        if (!$grade) {
+            Session::msg("You do not have permission to edit this grade", "info");
+            Response::redirect('admin/grades');
+        }
+
+        if ($request->isPost()) {
+            Session::csrfCheck();
+            $fields = ['grade', 'point', 'score'];
+            foreach ($fields as $field) {
+                $grade->{$field} = strtolower($request->get($field));
+            }
+
+            if ($grade->save()) {
+                Session::msg('Grades Saved Successfully', 'success');
+                Response::redirect('admin/grades');
+            }
+        }
+
+        $view = [
+            'errors' => $grade->getErrors(),
+            'grade' => $grade,
+        ];
+
+        return View::make('pages/admin/grades/create', $view);
     }
 
 }

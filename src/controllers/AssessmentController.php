@@ -154,6 +154,11 @@ class AssessmentController extends Controller
             'bind' => ['assessment_id' => $id],
         ];
 
+        $disabledParams = [
+            'conditions' => "assessment_id = :assessment_id AND status = 'disabled'",
+            'bind' => ['assessment_id' => $id],
+        ];
+
         $assesParams = [
             'conditions' => "assessment_id = :assessment_id",
             'bind' => ['assessment_id' => $id],
@@ -161,6 +166,7 @@ class AssessmentController extends Controller
         ];
 
         $view = [
+            'disabled' => Assessments::findFirst($disabledParams),
             'assessment' => Assessments::findFirst($params),
             'questions' => AssessmentQuestions::find($assesParams),
             'totalQues' => AssessmentQuestions::findTotal($assesParams),
@@ -177,6 +183,18 @@ class AssessmentController extends Controller
 
         $exam_id = $request->sanitize($_GET['exam_id']);
         $type = $request->sanitize($_GET['type']);
+
+        $disabledParams = [
+            'conditions' => "assessment_id = :assessment_id AND status = 'disabled'",
+            'bind' => ['assessment_id' => $exam_id],
+        ];
+
+        $disabled = Assessments::findFirst($disabledParams);
+
+        if(!$disabled) {
+            Session::msg("Examination Already started you can't add Question anymore.", 'info');
+            Response::redirect("lecturer/exam/question/view/$exam_id");
+        }
 
         $params = [
             'conditions' => "assessment_id = :assessment_id",

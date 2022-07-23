@@ -48,17 +48,19 @@ $this->title = "Examination Question";
                 </table>
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="text-sm border-bottom border-3 border-primary mt-2">Exam Questions <span class="badge bg-primary mb-1"><?= $totalQues ?></span></h5>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-danger">Add Questions</button>
-                        <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="visually-hidden">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/lecturer/exam/question/create/new?type=multiple&exam_id=<?= $assessment->assessment_id ?>">Multiple choice Question</a></li>
-                            <li><a class="dropdown-item" href="/lecturer/exam/question/create/new?type=objective&exam_id=<?= $assessment->assessment_id ?>">Objective Question</a></li>
-                            <li><a class="dropdown-item" href="/lecturer/exam/question/create/new?type=subjective&exam_id=<?= $assessment->assessment_id ?>">Subjective Question</a></li>
-                        </ul>
-                    </div>
+                    <?php if ($disabled) : ?>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger">Add Questions</button>
+                            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/lecturer/exam/question/create/new?type=multiple&exam_id=<?= $assessment->assessment_id ?>">Multiple choice Question</a></li>
+                                <li><a class="dropdown-item" href="/lecturer/exam/question/create/new?type=objective&exam_id=<?= $assessment->assessment_id ?>">Objective Question</a></li>
+                                <li><a class="dropdown-item" href="/lecturer/exam/question/create/new?type=subjective&exam_id=<?= $assessment->assessment_id ?>">Subjective Question</a></li>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <hr class="my-3">

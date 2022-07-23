@@ -5,7 +5,7 @@ global $currentUser;
 
 ?>
 
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+<header class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><img src="/assets/img/logo.png" alt="" width="32" height="32">
         <?php if ($currentUser->acl == 'student') : ?>
             Student Portal

@@ -55,6 +55,10 @@ $app->router->get('/student/exams/confirm_exam/{id}', [StudentPortalController::
 $app->router->get('/student/exam/{id}', [StudentPortalController::class, 'startExam']);
 $app->router->post('/student/exam/{id}', [StudentPortalController::class, 'startExam']);
 
+// Results.
+$app->router->get('/student/result', [StudentPortalController::class, 'result']);
+$app->router->get('/student/results', [StudentPortalController::class, 'results']);
+
 //---payments -to be remove cause am not using it anymore.
 $app->router->get('/student/payments', [StudentPortalController::class, 'payments']);
 
@@ -158,3 +162,8 @@ $app->router->post('/admin/roles/create/{id}', [AdminController::class, 'creater
 // Institute Levels
 $app->router->get('/admin/levels/{id}', [AdminController::class, 'levels']);
 $app->router->post('/admin/levels/{id}', [AdminController::class, 'levels']);
+
+//Grade Point
+$app->router->get('/admin/grades', [AdminController::class, 'grades']);
+$app->router->get('/admin/grades/create/{id}', [AdminController::class, 'creategrade']);
+$app->router->post('/admin/grades/create/{id}', [AdminController::class, 'creategrade']);

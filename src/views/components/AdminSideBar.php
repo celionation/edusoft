@@ -28,6 +28,7 @@ use core\helpers\Navigation;
             <?= Navigation::navItem('admin/users', 'Users') ?>
             <?= Navigation::navItem('admin/students', 'Students') ?>
             <?= Navigation::navItem('admin/roles', 'Roles') ?>
+            <?= Navigation::navItem('admin/grades', 'Grades') ?>
             <?= Navigation::navItem('admin/levels/new', 'Institute Levels') ?>
         </ul>
 

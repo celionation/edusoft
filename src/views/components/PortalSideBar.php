@@ -34,7 +34,7 @@ global $currentUser;
         </h6>
         <ul class="nav flex-column mb-2">
             <?php if ($currentUser->acl == 'student') : ?>
-                <?= Navigation::navItemIcon('student/results', 'Results', 'fas fa-chart-bar') ?>
+                <?= Navigation::navItemIcon('student/result', 'Result', 'fas fa-chart-bar') ?>
                 <?= Navigation::navItemIcon('student/assessments', 'Assessments', 'fas fa-file-signature') ?>
             <?php endif; ?>
             <?php if ($currentUser->acl == 'staff') : ?>

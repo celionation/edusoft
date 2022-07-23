@@ -285,6 +285,20 @@ class StudentPortalController extends Controller
 
     }
 
+    public function result(Request $request): View
+    {
+        $view = [];
+
+        return View::make('pages/portals/students/results/result', $view);
+    }
+
+    public function results(Request $request): View
+    {
+        $view = [];
+
+        return View::make('pages/portals/students/results/results', $view);
+    }
+
     public function payments(): View
     {
         return View::make('pages/portals/payments/payments');

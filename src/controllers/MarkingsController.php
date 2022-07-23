@@ -37,6 +37,9 @@ class MarkingsController extends Controller
     {
         Permission::permRedirect(['staff'], '');
 
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
             'columns' => "submitted_assessment.*, assessments.assessment_title, assessments.course_code, assessments.course_level, assessments.user_id, users.surname, users.firstname, users.lastname",
             'conditions' => "submitted_assessment.submitted = 'yes' AND submitted_assessment.marked = 'no' AND assessments.user_id = :user_id",
@@ -45,11 +48,18 @@ class MarkingsController extends Controller
                 ['assessments', 'submitted_assessment.assessment_id = assessments.assessment_id'],
             ],
             'bind' => ['user_id' => $this->currentUser->user_id],
-            'order' => "users.surname, users.firstname"
+            'order' => "users.surname, users.firstname",
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = SubmittedAssessment::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'toMarks' => SubmittedAssessment::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/portals/staffs/lecturers/toMark', $view);
@@ -63,6 +73,9 @@ class MarkingsController extends Controller
     {
         Permission::permRedirect(['staff'], '');
 
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $recordsPerPage = 5;
+
         $params = [
             'columns' => "submitted_assessment.*, assessments.assessment_title, assessments.course_code, assessments.course_level, assessments.user_id, users.surname, users.firstname, users.lastname",
             'conditions' => "submitted_assessment.submitted = 'yes' AND submitted_assessment.marked = 'yes' AND assessments.user_id = :user_id",
@@ -71,11 +84,18 @@ class MarkingsController extends Controller
                 ['assessments', 'submitted_assessment.assessment_id = assessments.assessment_id'],
             ],
             'bind' => ['user_id' => $this->currentUser->user_id],
-            'order' => "users.surname, users.firstname"
+            'order' => "users.surname, users.firstname",
+            'limit' => $recordsPerPage,
+            'offset' => ($currentPage - 1) * $recordsPerPage
         ];
+
+        $total = SubmittedAssessment::findTotal();
+        $numberOfPages = ceil($total / $recordsPerPage);
 
         $view = [
             'marked' => SubmittedAssessment::find($params),
+            'prevPage' => $currentPage > 1 ? $currentPage - 1 : false,
+            'nextPage' => $currentPage + 1 <= $numberOfPages ? $currentPage + 1 : false,
         ];
 
         return View::make('pages/portals/staffs/lecturers/marked', $view);
