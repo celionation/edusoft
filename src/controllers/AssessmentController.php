@@ -96,6 +96,7 @@ class AssessmentController extends Controller
 
             $assessment->user_id = $this->currentUser->user_id;
             $assessment->status = 'disabled';
+            $assessment->editable = 'enabled';
 
             if ($assessment->save()) {
                 Session::msg('Examination Created Now Proceed to add Questions...', 'success');

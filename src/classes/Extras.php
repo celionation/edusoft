@@ -117,7 +117,7 @@ class Extras
         if ($total_answer_count > 0) {
             $total_questions = count($questions);
 
-            return floor(($total_answer_count / $total_questions) * 100);
+            return round(($total_answer_count / $total_questions) * 100);
         }
 
         return 0;
@@ -154,7 +154,7 @@ class Extras
         if ($total_answer_count > 0) {
             $total_questions = count($questions);
 
-            return floor(($total_answer_count / $total_questions) * 100);
+            return round(($total_answer_count / $total_questions) * 100);
         }
 
         return 0;
@@ -191,7 +191,7 @@ class Extras
         if ($total_answer_count > 0) {
             $total_questions = count($questions);
 
-            return ($total_answer_count / $total_questions) * 100;
+            return round(($total_answer_count / $total_questions) * 100);
         }
 
         return 0;
