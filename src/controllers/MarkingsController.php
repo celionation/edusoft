@@ -10,7 +10,6 @@ use core\Response;
 use core\Controller;
 use src\models\Users;
 use src\classes\Permission;
-use src\models\Assessments;
 use core\helpers\CoreHelpers;
 use src\classes\GradingSystem;
 use src\models\CourseStudents;
