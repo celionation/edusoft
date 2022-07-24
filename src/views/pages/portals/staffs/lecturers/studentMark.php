@@ -162,13 +162,17 @@ $this->title = "Mark Student";
     }
 
     function autoMark(id) {
+        var assessment_id = '<?= $assessment->assessment_id ?>';
         if (window.confirm("Are you sure you want to Auto Mark this Exam? This May Override Previous Markings Saved.!")) {
-            window.location.href = `/assessments/student/auto_mark/${id}`;
+            window.location.href = `/assessments/student/auto_mark/${id}?assessment_id=${assessment_id}`;
         }
     }
 
     function setMarked(id) {
         var percent = '<?= $markedPercentage ?>';
+        var matricNo = '<?= $assessment->matriculation_no ?>';
+        var code = '<?= $assessment->course_code ?>';
+        var score = '<?= $score ?>';
 
         if (percent < 100) {
             alert("" + percent + "% Marked: You can only set Exam as Marked after all Question has been Marked.");
@@ -176,7 +180,7 @@ $this->title = "Mark Student";
         }
 
         if (window.confirm("You wont be able to mark anymore, after Set as Marked. So finish marking before you click on this button.")) {
-            window.location.href = `/assessments/to_mark/student/${id}?marked=yes&percent=${percent}`;
+            window.location.href = `/assessments/to_mark/student/${id}?marked=yes&percent=${percent}&course_code=${code}&matriculation_no=${matricNo}&score=${score}`;
         }
     }
 </script>

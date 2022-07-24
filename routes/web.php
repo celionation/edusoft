@@ -75,6 +75,7 @@ $app->router->get('/assessments/marked/student/{id}', [MarkingsController::class
 $app->router->get('/assessments/to_mark/student/{id}', [MarkingsController::class, 'student']);
 $app->router->post('/assessments/to_mark/student/{id}', [MarkingsController::class, 'student']);
 $app->router->get('/assessments/student/decline/{id}', [MarkingsController::class, 'decline']);
+$app->router->get('/assessments/student/auto_mark/{id}', [MarkingsController::class, 'autoMark']);
 
 //Assessment - Continous Assessment
 $app->router->get('/lecturer/cont_asses/questions', [AssessmentController::class, 'continousAssessment']);

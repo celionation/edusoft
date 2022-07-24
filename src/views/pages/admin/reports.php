@@ -16,13 +16,4 @@ $this->title = "Admin Reports";
 
 <div>
     <h5 class="text-danger text-center">This page is for running or testing the database queries before implementing.. should be deleted when.</h5>
-
-    <?php
-    
-    $grade = GradingSystem::Grading(78);
-
-    echo $grade->score;
-    
-
-    ?>
 </div>

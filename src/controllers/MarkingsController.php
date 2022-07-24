@@ -12,10 +12,12 @@ use src\models\Users;
 use src\classes\Permission;
 use src\models\Assessments;
 use core\helpers\CoreHelpers;
+use src\classes\GradingSystem;
 use src\models\CourseStudents;
 use src\models\AssessmentAnswer;
 use src\models\SubmittedAssessment;
 use src\models\AssessmentAttendance;
+use src\models\AssessmentQuestions;
 
 class MarkingsController extends Controller
 {
@@ -144,6 +146,9 @@ class MarkingsController extends Controller
         if (isset($_GET['marked']) && isset($_GET['percent'])) {
             $marked = $request->sanitize($_GET['marked']);
             $percent = $request->sanitize($_GET['percent']);
+            $code = $request->sanitize($_GET['course_code']);
+            $matriculation_no = $request->sanitize($_GET['matriculation_no']);
+            $score = $request->sanitize($_GET['score']);
 
             if($percent < 100) {
                 Session::msg("{$percent}% Marked: You can only set Exam as Marked after all Question has been Marked.", 'warning');
@@ -158,6 +163,7 @@ class MarkingsController extends Controller
             $submitAssessment = new SubmittedAssessment();
 
             if ($submitAssessment->inlineUpdate($markedDetails, ['roll_no' => $id])) {
+                GradingSystem::SetGrade($code, $matriculation_no, $score);
                 Session::msg('Examination Markings Completed.', 'success');
                 Response::redirect("assessments/to_mark/student/{$id}");
             }
@@ -237,6 +243,50 @@ class MarkingsController extends Controller
             Session::msg('Examination Decline Now Student Can retake Exam!.', 'success');
             Response::redirect('assessments/to_mark');
         }
+    }
+
+    public function autoMark(Request $request)
+    {
+        Permission::permRedirect(['staff'], '');
+
+        $id = $request->getParam('id');
+
+        if(isset($_GET['assessment_id'])) {
+            $assessment_id = $request->sanitize($_GET['assessment_id']);
+        }
+
+        $questionParams = [
+            'columns' => "question_id, correct_answer",
+            'conditions' => "assessment_id = :assessment_id AND (question_type = 'multiple' || question_type = 'objective')",
+            'bind' => ['assessment_id' => $assessment_id],
+        ];
+
+        $questions = AssessmentQuestions::find($questionParams);
+
+        if($questions) {
+            foreach($questions as $value) {
+                $answersParam = [
+                    'conditions' => "roll_no = :roll_no AND question_id = :question_id",
+                    'bind' => ['roll_no' => $id, 'question_id' => $value->question_id],
+                    'limit' => '1',
+                ];
+
+                $answers = AssessmentAnswer::findFirst($answersParam);
+
+                if($answers) {
+                    $correctAnswer = strtolower(trim($value->correct_answer));
+                    $answer = strtolower(trim($answers->answer));
+
+                    if ($correctAnswer == $answer) {
+                        $answers->inlineUpdate(['mark' => 'correct'], ['question_id' => $value->question_id, 'roll_no' => $id]);
+                    } else {
+                        $answers->inlineUpdate(['mark' => 'wrong'], ['question_id' => $value->question_id, 'roll_no' => $id]);
+                    }
+                }
+            }
+        }
+        Session::msg('Auto Markings Completed.', 'success');
+        Response::redirect("assessments/to_mark/student/{$id}");
     }
 
 }
